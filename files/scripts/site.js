@@ -81,13 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const password = regForm.password.value;
       const firstName = regForm.firstName.value.trim();
       const lastName = regForm.lastName.value.trim();
-      const res = await fetch('http://localhost:3000/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, firstName, lastName })
-      });
-      const data = await res.json();
-      if (res.ok) {
+      
+      // Имитируем регистрацию без API
+      if (email && password && firstName && lastName) {
         // Отслеживание регистрации в Google Analytics
         if (typeof gtag !== 'undefined') {
           gtag('event', 'sign_up', {
@@ -97,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Регистрация успешна! Теперь войдите.');
         window.location.href = 'login.html';
       } else {
-        alert(data.message || 'Ошибка регистрации');
+        alert('Пожалуйста, заполните все поля');
       }
     });
   }
@@ -109,26 +105,25 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const email = loginForm.email.value.trim();
       const password = loginForm.password.value;
-      const res = await fetch('http://localhost:3000/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      const data = await res.json();
-      if (res.ok) {
+      
+      // Имитируем вход без API
+      if (email && password) {
         // Отслеживание входа в Google Analytics
         if (typeof gtag !== 'undefined') {
           gtag('event', 'login', {
             method: 'email'
           });
         }
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('firstName', data.firstName);
-        localStorage.setItem('lastName', data.lastName);
+        
+        // Сохраняем данные пользователя
+        localStorage.setItem('token', 'demo-token-123');
+        localStorage.setItem('firstName', 'Демо');
+        localStorage.setItem('lastName', 'Пользователь');
+        localStorage.setItem('email', email);
 
         window.location.href = 'cabinet.html';
       } else {
-        alert(data.message || 'Ошибка входа');
+        alert('Пожалуйста, введите email и пароль');
       }
     });
   }

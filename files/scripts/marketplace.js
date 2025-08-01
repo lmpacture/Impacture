@@ -127,10 +127,67 @@ function setupEventListeners() {
 async function loadProducts() {
   try {
     console.log('Loading products...');
-    const response = await fetch('/api/products');
-    if (!response.ok) throw new Error('Ошибка загрузки товаров');
     
-    allProducts = await response.json();
+    // Статические данные товаров
+    allProducts = [
+      {
+        id: 'product_1',
+        title: 'Arduino Uno R3',
+        description: 'Микроконтроллер для проектов робототехники',
+        price: 15000,
+        condition: 'new',
+        category: 'electronics',
+        city: 'Алматы',
+        images: ['files/images/impacture.png'],
+        seller: {
+          firstName: 'Алексей',
+          lastName: 'Петров'
+        }
+      },
+      {
+        id: 'product_2',
+        title: 'Raspberry Pi 4 Model B',
+        description: 'Одноплатный компьютер для разработки',
+        price: 45000,
+        condition: 'used',
+        category: 'electronics',
+        city: 'Астана',
+        images: ['files/images/impacture.png'],
+        seller: {
+          firstName: 'Мария',
+          lastName: 'Иванова'
+        }
+      },
+      {
+        id: 'product_3',
+        title: 'Набор датчиков',
+        description: 'Комплект датчиков для Arduino проектов',
+        price: 8000,
+        condition: 'new',
+        category: 'electronics',
+        city: 'Алматы',
+        images: ['files/images/impacture.png'],
+        seller: {
+          firstName: 'Дмитрий',
+          lastName: 'Сидоров'
+        }
+      },
+      {
+        id: 'product_4',
+        title: '3D принтер Ender 3',
+        description: 'Принтер для печати пластиковых деталей',
+        price: 120000,
+        condition: 'used',
+        category: '3d-printing',
+        city: 'Астана',
+        images: ['files/images/impacture.png'],
+        seller: {
+          firstName: 'Елена',
+          lastName: 'Козлова'
+        }
+      }
+    ];
+    
     console.log('Loaded products:', allProducts);
     filteredProducts = [...allProducts];
     renderProducts();
