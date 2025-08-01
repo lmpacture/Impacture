@@ -149,6 +149,13 @@ async function loadChats() {
         const token = localStorage.getItem('token');
         if (!token) return;
 
+        // Проверяем, что элементы чата существуют
+        const chatList = document.getElementById('chat-list');
+        if (!chatList) {
+            console.log('Элементы чата не найдены на этой странице');
+            return;
+        }
+
         // Имитируем загрузку чатов без API
         allChats = [
             {

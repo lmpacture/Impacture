@@ -32,6 +32,12 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadTeams() {
   const container = document.getElementById('teams-container');
   
+  // Проверяем, что контейнер найден
+  if (!container) {
+    console.error('Контейнер teams-container не найден');
+    return;
+  }
+  
   try {
     // Статические данные команд
     const teams = [
@@ -102,15 +108,17 @@ async function loadTeams() {
     
   } catch (error) {
     console.error('Error loading teams:', error);
-    container.innerHTML = `
-      <div class="text-center py-5">
-        <div class="mb-4">
-          <i class="bi bi-exclamation-triangle" style="font-size: 3rem; color: #ef4444;"></i>
+    if (container) {
+      container.innerHTML = `
+        <div class="text-center py-5">
+          <div class="mb-4">
+            <i class="bi bi-exclamation-triangle" style="font-size: 3rem; color: #ef4444;"></i>
+          </div>
+          <h3 class="text-gray-600 mb-2">Ошибка загрузки команд</h3>
+          <p class="text-gray-500">Попробуйте обновить страницу</p>
         </div>
-        <h3 class="text-gray-600 mb-2">Ошибка загрузки команд</h3>
-        <p class="text-gray-500">Попробуйте обновить страницу</p>
-      </div>
-    `;
+      `;
+    }
   }
 }
 
