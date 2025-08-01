@@ -90,8 +90,31 @@ document.addEventListener('DOMContentLoaded', () => {
             method: 'email'
           });
         }
-        alert('Регистрация успешна! Теперь войдите.');
-        window.location.href = 'login.html';
+        
+        // Генерируем токен подтверждения
+        const confirmToken = 'confirm_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        
+        // Сохраняем данные для подтверждения
+        localStorage.setItem('pendingEmail', email);
+        localStorage.setItem('pendingFirstName', firstName);
+        localStorage.setItem('pendingLastName', lastName);
+        localStorage.setItem('confirmToken', confirmToken);
+        
+        // Создаем ссылку для подтверждения
+        const confirmUrl = `${window.location.origin}/confirm-email.html?token=${confirmToken}&email=${encodeURIComponent(email)}`;
+        
+        // Показываем сообщение с ссылкой
+        const message = `Регистрация успешна! 
+        
+Для активации аккаунта перейдите по ссылке:
+${confirmUrl}
+
+Или скопируйте ссылку и откройте в браузере.`;
+        
+        alert(message);
+        
+        // Очищаем форму
+        regForm.reset();
       } else {
         alert('Пожалуйста, заполните все поля');
       }
@@ -108,6 +131,15 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Имитируем вход без API
       if (email && password) {
+        // Проверяем подтверждение email
+        const emailConfirmed = localStorage.getItem('emailConfirmed');
+        const confirmedEmail = localStorage.getItem('confirmedEmail');
+        
+        if (emailConfirmed !== 'true' || confirmedEmail !== email) {
+          alert('Пожалуйста, подтвердите ваш email перед входом. Проверьте почту и перейдите по ссылке подтверждения.');
+          return;
+        }
+        
         // Отслеживание входа в Google Analytics
         if (typeof gtag !== 'undefined') {
           gtag('event', 'login', {
@@ -118,13 +150,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Определяем имя пользователя по email
         let firstName, lastName;
         if (email === 'seikenov63@gmail.com') {
-          firstName = 'Асель';
+          firstName = 'Али';
           lastName = 'Сейкенов';
         } else {
-          // Извлекаем имя из email для других пользователей
-          const emailName = email.split('@')[0];
-          firstName = emailName.charAt(0).toUpperCase() + emailName.slice(1);
-          lastName = 'Пользователь';
+          // Используем сохраненные данные из регистрации
+          firstName = localStorage.getItem('pendingFirstName') || email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1);
+          lastName = localStorage.getItem('pendingLastName') || 'Пользователь';
         }
         
         // Сохраняем данные пользователя
