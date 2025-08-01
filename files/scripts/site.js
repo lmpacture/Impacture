@@ -115,10 +115,22 @@ document.addEventListener('DOMContentLoaded', () => {
           });
         }
         
+        // Определяем имя пользователя по email
+        let firstName, lastName;
+        if (email === 'seikenov63@gmail.com') {
+          firstName = 'Асель';
+          lastName = 'Сейкенов';
+        } else {
+          // Извлекаем имя из email для других пользователей
+          const emailName = email.split('@')[0];
+          firstName = emailName.charAt(0).toUpperCase() + emailName.slice(1);
+          lastName = 'Пользователь';
+        }
+        
         // Сохраняем данные пользователя
-        localStorage.setItem('token', 'demo-token-123');
-        localStorage.setItem('firstName', 'Демо');
-        localStorage.setItem('lastName', 'Пользователь');
+        localStorage.setItem('token', 'user-token-' + Date.now());
+        localStorage.setItem('firstName', firstName);
+        localStorage.setItem('lastName', lastName);
         localStorage.setItem('email', email);
 
         window.location.href = 'cabinet.html';

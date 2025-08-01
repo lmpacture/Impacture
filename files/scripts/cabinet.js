@@ -77,12 +77,19 @@ function setupButtonHandlers() {
 // Загрузка информации о пользователе
 async function loadUserInfo() {
   try {
-    const firstName = localStorage.getItem('firstName') || 'Демо';
-    const lastName = localStorage.getItem('lastName') || 'Пользователь';
+    const firstName = localStorage.getItem('firstName') || 'Пользователь';
+    const lastName = localStorage.getItem('lastName') || '';
+    const email = localStorage.getItem('email') || '';
     
     const userInfo = document.getElementById('user-info');
     if (userInfo) {
-      userInfo.textContent = `Здравствуйте, ${firstName} ${lastName}!`;
+      if (firstName && lastName) {
+        userInfo.textContent = `Здравствуйте, ${firstName} ${lastName}!`;
+      } else if (email) {
+        userInfo.textContent = `Здравствуйте, ${email}!`;
+      } else {
+        userInfo.textContent = 'Здравствуйте!';
+      }
     }
   } catch (error) {
     console.error('Error loading user info:', error);

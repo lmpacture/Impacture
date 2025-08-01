@@ -20,12 +20,16 @@ async function loadCurrentUser() {
     try {
         const token = localStorage.getItem('token');
         if (token) {
-            // Имитируем данные пользователя
+            // Используем реальные данные пользователя
+            const firstName = localStorage.getItem('firstName') || 'Пользователь';
+            const lastName = localStorage.getItem('lastName') || '';
+            const email = localStorage.getItem('email') || 'user@example.com';
+            
             currentUser = {
-                id: 'demo-user-1',
-                firstName: 'Демо',
-                lastName: 'Пользователь',
-                email: localStorage.getItem('email') || 'demo@example.com'
+                id: 'user-' + Date.now(),
+                firstName: firstName,
+                lastName: lastName,
+                email: email
             };
         }
     } catch (error) {
