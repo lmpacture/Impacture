@@ -147,18 +147,28 @@ function closeChatModal() {
 async function loadChats() {
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch('/api/chats', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+        if (!token) return;
 
-        if (response.ok) {
-            allChats = await response.json();
-            await displayChats();
-        } else {
-            console.error('Ошибка загрузки чатов');
-        }
+        // Имитируем загрузку чатов без API
+        allChats = [
+            {
+                userId: 'user_1',
+                userEmail: 'alex@example.com',
+                lastMessage: 'Привет! Интересует ваш товар',
+                productInfo: {
+                    title: 'Arduino Uno R3',
+                    price: 15000
+                }
+            },
+            {
+                userId: 'user_2', 
+                userEmail: 'maria@example.com',
+                lastMessage: 'Спасибо за информацию!',
+                productInfo: null
+            }
+        ];
+        
+        await displayChats();
     } catch (error) {
         console.error('Error loading chats:', error);
     }
@@ -174,79 +184,42 @@ async function displayChats() {
         return;
     }
 
-    // Загружаем данные пользователей для отображения имен
-    try {
-        const token = localStorage.getItem('token');
-        const usersResponse = await fetch('/api/users', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+    // Имитируем данные пользователей
+    const users = [
+        { id: 'user_1', firstName: 'Алексей', lastName: 'Петров', email: 'alex@example.com' },
+        { id: 'user_2', firstName: 'Мария', lastName: 'Иванова', email: 'maria@example.com' }
+    ];
+    
+    chatList.innerHTML = allChats.map(chat => {
+        // Находим пользователя по ID
+        const user = users.find(u => u.id === chat.userId);
+        const displayName = user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email : chat.userEmail;
+        const avatarText = user ? (user.firstName ? user.firstName.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()) : chat.userEmail.charAt(0).toUpperCase();
         
-        let users = [];
-        if (usersResponse.ok) {
-            users = await usersResponse.json();
+        let productInfo = '';
+        let productInfoData = null;
+        if (chat.productInfo) {
+            productInfo = `
+                <div class="chat-product-info">
+                    <small>💬 О товаре: ${chat.productInfo.title} (${chat.productInfo.price}₸)</small>
+                </div>
+            `;
+            productInfoData = chat.productInfo;
         }
         
-        chatList.innerHTML = allChats.map(chat => {
-            // Находим пользователя по ID
-            const user = users.find(u => u.id === chat.userId);
-            const displayName = user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email : chat.userEmail;
-            const avatarText = user ? (user.firstName ? user.firstName.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()) : chat.userEmail.charAt(0).toUpperCase();
-            
-            let productInfo = '';
-            let productInfoData = null;
-            if (chat.productInfo) {
-                productInfo = `
-                    <div class="chat-product-info">
-                        <small>💬 О товаре: ${chat.productInfo.title} (${chat.productInfo.price}₸)</small>
-                    </div>
-                `;
-                productInfoData = chat.productInfo;
-            }
-            
-            return `
-                <div class="chat-item" onclick="openChat('${chat.userId}', '${displayName}', ${JSON.stringify(productInfoData).replace(/"/g, '&quot;')})">
-                    <div class="chat-avatar">
-                        ${avatarText}
-                    </div>
-                    <div class="chat-info">
-                        <div class="chat-name">${displayName}</div>
-                        <div class="chat-last-message">${chat.lastMessage || 'Нет сообщений'}</div>
-                        ${productInfo}
-                    </div>
+        return `
+            <div class="chat-item" onclick="openChat('${chat.userId}', '${displayName}', ${JSON.stringify(productInfoData).replace(/"/g, '&quot;')})">
+                <div class="chat-avatar">
+                    ${avatarText}
                 </div>
-            `;
-        }).join('');
-    } catch (error) {
-        console.error('Error loading users for chat display:', error);
-        // Fallback к старому отображению
-        chatList.innerHTML = allChats.map(chat => {
-            let productInfo = '';
-            let productInfoData = null;
-            if (chat.productInfo) {
-                productInfo = `
-                    <div class="chat-product-info">
-                        <small>💬 О товаре: ${chat.productInfo.title} (${chat.productInfo.price}₸)</small>
-                    </div>
-                `;
-                productInfoData = chat.productInfo;
-            }
-            
-            return `
-                <div class="chat-item" onclick="openChat('${chat.userId}', '${chat.userEmail}', ${JSON.stringify(productInfoData).replace(/"/g, '&quot;')})">
-                    <div class="chat-avatar">
-                        ${chat.userEmail.charAt(0).toUpperCase()}
-                    </div>
-                    <div class="chat-info">
-                        <div class="chat-name">${chat.userEmail}</div>
-                        <div class="chat-last-message">${chat.lastMessage || 'Нет сообщений'}</div>
-                        ${productInfo}
-                    </div>
+                <div class="chat-info">
+                    <div class="chat-name">${displayName}</div>
+                    <div class="chat-last-message">${chat.lastMessage || 'Нет сообщений'}</div>
+                    ${productInfo}
                 </div>
-            `;
-        }).join('');
-    }
+            </div>
+        `;
+    }).join('');
 }
 
 // Открытие чата с конкретным пользователем
@@ -274,19 +247,34 @@ async function openChat(userId, userName, productInfo = null) {
 // Загрузка сообщений чата
 async function loadChatMessages(userId) {
     try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`/api/chats/${userId}/messages`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        if (response.ok) {
-            currentChatMessages = await response.json();
-            displayMessages();
-        } else {
-            console.error('Ошибка загрузки сообщений');
+        // Загружаем сообщения из локального хранилища
+        const chatKey = `chat_${userId}`;
+        currentChatMessages = JSON.parse(localStorage.getItem(chatKey) || '[]');
+        
+        // Если сообщений нет, добавляем демо-сообщения
+        if (currentChatMessages.length === 0) {
+            currentChatMessages = [
+                {
+                    id: 1,
+                    text: 'Привет! Интересует ваш товар',
+                    senderId: userId,
+                    receiverId: 'demo-user-1',
+                    timestamp: new Date(Date.now() - 3600000).toISOString(),
+                    type: 'text'
+                },
+                {
+                    id: 2,
+                    text: 'Здравствуйте! Конечно, расскажу подробнее',
+                    senderId: 'demo-user-1',
+                    receiverId: userId,
+                    timestamp: new Date(Date.now() - 1800000).toISOString(),
+                    type: 'text'
+                }
+            ];
+            localStorage.setItem(chatKey, JSON.stringify(currentChatMessages));
         }
+        
+        displayMessages();
     } catch (error) {
         console.error('Error loading messages:', error);
     }
