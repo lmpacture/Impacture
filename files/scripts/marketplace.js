@@ -279,16 +279,9 @@ async function loadCart() {
   }
   
   try {
-    const response = await fetch('/api/cart', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    
-    if (response.ok) {
-      const cart = await response.json();
-      updateCartBadge(cart.items.length);
-    } else {
-      updateCartBadge(0);
-    }
+    // Имитируем загрузку корзины без API
+    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+    updateCartBadge(cartItems.length);
   } catch (error) {
     console.error('Error loading cart:', error);
     updateCartBadge(0);
@@ -315,20 +308,27 @@ async function addToCart(productId) {
   }
   
   try {
-    const response = await fetch('/api/cart', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({ productId })
-    });
+    // Имитируем добавление в корзину без API
+    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+    const product = allProducts.find(p => p.id === productId);
     
-    if (response.ok) {
+    if (product) {
+      const existingItem = cartItems.find(item => item.id === productId);
+      if (existingItem) {
+        existingItem.qty += 1;
+      } else {
+        cartItems.push({
+          id: productId,
+          title: product.title,
+          price: product.price,
+          image: product.images[0],
+          qty: 1
+        });
+      }
+      
+      localStorage.setItem('cart', JSON.stringify(cartItems));
       loadCart();
       alert('Товар добавлен в корзину!');
-    } else {
-      throw new Error('Ошибка добавления в корзину');
     }
   } catch (error) {
     console.error('Error adding to cart:', error);
@@ -356,14 +356,9 @@ async function loadCartItems() {
   if (!token) return;
   
   try {
-    const response = await fetch('/api/cart', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    
-    if (response.ok) {
-      const cart = await response.json();
-      renderCartItems(cart.items);
-    }
+    // Имитируем загрузку товаров корзины без API
+    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+    renderCartItems(cartItems);
   } catch (error) {
     console.error('Error loading cart items:', error);
   }
@@ -409,16 +404,22 @@ async function updateCartItemQty(productId, qty) {
   if (!token) return;
   
   try {
-    const response = await fetch(`/api/cart/${productId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({ qty })
-    });
+    // Имитируем обновление количества без API
+    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+    const item = cartItems.find(item => item.id === productId);
     
-    if (response.ok) {
+    if (item) {
+      if (qty <= 0) {
+        // Удаляем товар если количество 0 или меньше
+        const index = cartItems.findIndex(item => item.id === productId);
+        if (index > -1) {
+          cartItems.splice(index, 1);
+        }
+      } else {
+        item.qty = qty;
+      }
+      
+      localStorage.setItem('cart', JSON.stringify(cartItems));
       loadCartItems();
       loadCart();
     }
@@ -432,12 +433,13 @@ async function removeFromCart(productId) {
   if (!token) return;
   
   try {
-    const response = await fetch(`/api/cart/${productId}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
+    // Имитируем удаление из корзины без API
+    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+    const index = cartItems.findIndex(item => item.id === productId);
     
-    if (response.ok) {
+    if (index > -1) {
+      cartItems.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cartItems));
       loadCartItems();
       loadCart();
     }
@@ -454,18 +456,19 @@ async function checkout() {
   }
   
   try {
-    const response = await fetch('/api/checkout', {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
+    // Имитируем оформление покупки без API
+    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
     
-    if (response.ok) {
-      alert('Покупка оформлена!');
-      closeCart();
-      loadCart();
-    } else {
-      throw new Error('Ошибка оформления покупки');
+    if (cartItems.length === 0) {
+      alert('Корзина пуста');
+      return;
     }
+    
+    // Очищаем корзину
+    localStorage.removeItem('cart');
+    alert('Покупка оформлена! Спасибо за заказ!');
+    closeCart();
+    loadCart();
   } catch (error) {
     console.error('Error checkout:', error);
     alert('Ошибка оформления покупки');
