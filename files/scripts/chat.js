@@ -47,14 +47,14 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadCurrentUser() {
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:3000/api/profile', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        if (response.ok) {
-            currentUser = await response.json();
+        if (token) {
+            // Имитируем данные пользователя
+            currentUser = {
+                id: 'demo-user-1',
+                firstName: 'Демо',
+                lastName: 'Пользователь',
+                email: localStorage.getItem('email') || 'demo@example.com'
+            };
         }
     } catch (error) {
         console.error('Error loading current user:', error);
@@ -338,34 +338,25 @@ async function sendMessage() {
     if (!message) return;
 
     try {
-        const token = localStorage.getItem('token');
-        
-        const requestBody = {
+        // Имитируем отправку сообщения без API
+        const newMessage = {
+            id: Date.now(),
             text: message,
-            receiverId: currentChatUser.id
+            senderId: currentUser?.id || 'demo-user-1',
+            receiverId: currentChatUser.id,
+            timestamp: new Date().toISOString(),
+            type: 'text'
         };
         
-        // Если есть информация о товаре, добавляем productId
-        if (currentChatUser.productInfo && currentChatUser.productInfo.id) {
-            requestBody.productId = currentChatUser.productInfo.id;
-        }
+        // Добавляем сообщение в локальное хранилище
+        const chatKey = `chat_${currentChatUser.id}`;
+        const existingMessages = JSON.parse(localStorage.getItem(chatKey) || '[]');
+        existingMessages.push(newMessage);
+        localStorage.setItem(chatKey, JSON.stringify(existingMessages));
         
-        const response = await fetch('http://localhost:3000/api/chats/send', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(requestBody)
-        });
-
-        if (response.ok) {
-            messageInput.value = '';
-            // Перезагружаем сообщения
-            await loadChatMessages(currentChatUser.id);
-        } else {
-            console.error('Ошибка отправки сообщения');
-        }
+        messageInput.value = '';
+        // Перезагружаем сообщения
+        await loadChatMessages(currentChatUser.id);
     } catch (error) {
         console.error('Error sending message:', error);
     }
@@ -377,25 +368,28 @@ async function handleFileUpload(event) {
     if (!file || !currentChatUser) return;
 
     try {
-        const token = localStorage.getItem('token');
-        const formData = new FormData();
-        formData.append('image', file);
-        formData.append('receiverId', currentChatUser.id);
-
-        const response = await fetch('http://localhost:3000/api/chats/send-image', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: formData
-        });
-
-        if (response.ok) {
+        // Имитируем отправку изображения без API
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const newMessage = {
+                id: Date.now(),
+                image: e.target.result,
+                senderId: currentUser?.id || 'demo-user-1',
+                receiverId: currentChatUser.id,
+                timestamp: new Date().toISOString(),
+                type: 'image'
+            };
+            
+            // Добавляем сообщение в локальное хранилище
+            const chatKey = `chat_${currentChatUser.id}`;
+            const existingMessages = JSON.parse(localStorage.getItem(chatKey) || '[]');
+            existingMessages.push(newMessage);
+            localStorage.setItem(chatKey, JSON.stringify(existingMessages));
+            
             // Перезагружаем сообщения
-            await loadChatMessages(currentChatUser.id);
-        } else {
-            console.error('Ошибка отправки изображения');
-        }
+            loadChatMessages(currentChatUser.id);
+        };
+        reader.readAsDataURL(file);
     } catch (error) {
         console.error('Error sending image:', error);
     }

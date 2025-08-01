@@ -271,11 +271,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Сброс пароля: отправка запроса на e-mail
 async function requestPasswordReset(email) {
-  const res = await fetch('http://localhost:3000/api/request-password-reset', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email })
-  });
-  const data = await res.json();
-  return data.message;
+  // Имитируем сброс пароля без API
+  if (email && email.includes('@')) {
+    return 'Инструкции по сбросу пароля отправлены на ваш email';
+  } else {
+    return 'Пожалуйста, введите корректный email';
+  }
 }

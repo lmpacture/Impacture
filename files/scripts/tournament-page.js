@@ -15,6 +15,7 @@ async function registerForTournament() {
   if (!token) {
     alert('Для участия в турнире необходимо войти в аккаунт');
     window.location.href = '../login.html';
+    return;
   }
   
   const tournamentId = getTournamentIdFromUrl();
@@ -24,21 +25,9 @@ async function registerForTournament() {
   }
   
   try {
-    const response = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}/register`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-    
-    const data = await response.json();
-    
-    if (response.ok) {
-      alert('Успешная регистрация на турнир!');
-      updateTournamentData(); // Обновляем данные
-    } else {
-      alert(data.error || 'Ошибка регистрации на турнир');
-    }
+    // Имитируем регистрацию без API
+    alert('Успешная регистрация на турнир!');
+    updateTournamentData(); // Обновляем данные
   } catch (error) {
     console.error('Error registering for tournament:', error);
     alert('Ошибка регистрации на турнир');
@@ -58,13 +47,16 @@ async function updateTournamentData() {
   if (!tournamentId) return;
   
   try {
-    const response = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}`);
-    if (!response.ok) throw new Error('Не удалось загрузить данные турнира');
-    
-    const tournament = await response.json();
+    // Статические данные турнира
+    const tournament = {
+      id: tournamentId,
+      participants: [1, 2, 3, 4, 5],
+      maxParticipants: 30,
+      status: 'recruiting'
+    };
     
     // Обновляем количество участников
-    const participantsElement = document.querySelector('.bi-people').parentElement.querySelector('span');
+    const participantsElement = document.querySelector('.bi-people')?.parentElement?.querySelector('span');
     if (participantsElement) {
       const maxParticipants = tournament.maxParticipants || '∞';
       participantsElement.textContent = `${tournament.participants ? tournament.participants.length : 0} / ${maxParticipants} участников`;
