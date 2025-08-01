@@ -20,7 +20,7 @@ async function loadTournaments() {
         city: 'Алматы',
         maxParticipants: 50,
         participants: [],
-        image: 'files/images/hackathon.jpg'
+        image: 'files/images/impacture.png'
       },
       {
         id: 'tournament_1754033695196_u8j3e3ief',
@@ -32,7 +32,7 @@ async function loadTournaments() {
         city: 'Астана',
         maxParticipants: 30,
         participants: [1, 2, 3, 4, 5],
-        image: 'files/images/robotics.jpg'
+        image: 'files/images/impacture.png'
       },
       {
         id: 'tournament_1754034077301_kig6xk2w1',
@@ -44,7 +44,7 @@ async function loadTournaments() {
         city: 'Алматы',
         maxParticipants: 25,
         participants: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        image: 'files/images/ai-challenge.jpg'
+        image: 'files/images/impacture.png'
       }
     ];
     
