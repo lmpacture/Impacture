@@ -63,6 +63,15 @@ async function loadCurrentUser() {
 
 // Настройка обработчиков чата
 function setupChatHandlers() {
+    // Проверяем, есть ли элементы чата на странице
+    const chatModal = document.getElementById('chat-modal');
+    const chatList = document.getElementById('chat-list');
+    
+    if (!chatModal || !chatList) {
+        console.log('Элементы чата не найдены на этой странице');
+        return;
+    }
+
     // Кнопка открытия чата
     const chatBtn = document.getElementById('chat-btn');
     if (chatBtn) {
@@ -107,7 +116,6 @@ function setupChatHandlers() {
 
     // Закрытие по клику вне модального окна
     document.addEventListener('click', function(e) {
-        const chatModal = document.getElementById('chat-modal');
         if (e.target === chatModal) {
             closeChatModal();
         }
@@ -116,7 +124,6 @@ function setupChatHandlers() {
     // Закрытие по клавише Escape
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-            const chatModal = document.getElementById('chat-modal');
             if (chatModal && chatModal.classList.contains('show')) {
                 closeChatModal();
             }
@@ -127,10 +134,14 @@ function setupChatHandlers() {
 // Открытие модального окна чата
 async function openChatModal() {
     const modal = document.getElementById('chat-modal');
-    if (modal) {
+    const chatList = document.getElementById('chat-list');
+    
+    if (modal && chatList) {
         modal.classList.add('show');
         await loadCurrentUser(); // Убеждаемся, что currentUser загружен
         loadChats();
+    } else {
+        console.log('Элементы чата не найдены на этой странице');
     }
 }
 
