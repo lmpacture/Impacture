@@ -1,46 +1,18 @@
 // Chat.js - Система чатов
 
-let currentUser = null;
-let currentChatUser = null;
+// Глобальные переменные
 let allChats = [];
 let currentChatMessages = [];
+let currentUser = null;
+let currentChatUser = null;
 
+// Инициализация чата после загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
-    // Проверяем авторизацию
-    const token = localStorage.getItem('token');
-    if (!token) {
-        return; // Не показываем чат если пользователь не авторизован
-    }
-
-    // Загружаем информацию о пользователе
-    loadCurrentUser();
-    
-    // Настраиваем обработчики
+    // Настройка обработчиков чата
     setupChatHandlers();
     
-    // Загружаем чаты
-    loadChats();
-    
-    // Проверяем параметры URL для автоматического открытия чата
-    const urlParams = new URLSearchParams(window.location.search);
-    const openChat = urlParams.get('openChat');
-    const sellerId = urlParams.get('sellerId');
-    const productId = urlParams.get('productId');
-    
-    if (openChat === 'true' && sellerId) {
-        // Автоматически открываем чат с продавцом
-        setTimeout(() => {
-            openChatModal();
-            setTimeout(() => {
-                const productInfo = productId ? {
-                    id: productId,
-                    title: urlParams.get('productTitle') || 'Товар',
-                    price: urlParams.get('productPrice') || 0
-                } : null;
-                openChat(sellerId, 'Продавец', productInfo);
-            }, 200);
-        }, 500);
-    }
+    // Добавление кнопки чата в навбар
+    addChatButtonToNavbar();
 });
 
 // Загрузка информации о текущем пользователе
