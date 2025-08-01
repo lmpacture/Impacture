@@ -16,6 +16,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // Загружаем информацию о пользователе
   loadUserInfo();
 
+  // Инициализируем статические данные
+  initializeStaticData();
+
+  // Обработчики кнопок
+  setupButtonHandlers();
+
   // Обработчик кнопки "Выйти"
   const logoutBtn = document.getElementById('logout-btn');
   if (logoutBtn) {
@@ -24,10 +30,49 @@ document.addEventListener('DOMContentLoaded', function() {
       window.location.href = 'login.html';
     });
   }
-
-  // Инициализируем статические данные
-  initializeStaticData();
 });
+
+// Настройка обработчиков кнопок
+function setupButtonHandlers() {
+  // Турниры
+  const createTournamentBtn = document.getElementById('create-tournament-btn');
+  if (createTournamentBtn) {
+    createTournamentBtn.addEventListener('click', () => {
+      alert('Форма создания турнира появится здесь!');
+    });
+  }
+
+  const myTournamentsBtn = document.getElementById('my-tournaments-btn');
+  if (myTournamentsBtn) {
+    myTournamentsBtn.addEventListener('click', loadMyTournaments);
+  }
+
+  // Товары
+  const createProductBtn = document.getElementById('create-product-btn');
+  if (createProductBtn) {
+    createProductBtn.addEventListener('click', () => {
+      alert('Форма добавления товара появится здесь!');
+    });
+  }
+
+  const myProductsBtn = document.getElementById('my-products-btn');
+  if (myProductsBtn) {
+    myProductsBtn.addEventListener('click', loadMyProducts);
+  }
+
+  // Команды
+  const createTeamBtn = document.getElementById('create-team-btn');
+  if (createTeamBtn) {
+    createTeamBtn.addEventListener('click', () => {
+      alert('Форма создания команды появится здесь!');
+    });
+  }
+
+  const myTeamsBtn = document.getElementById('my-teams-btn');
+  if (myTeamsBtn) {
+    myTeamsBtn.addEventListener('click', loadMyTeams);
+  }
+}
 
 // Загрузка информации о пользователе
 async function loadUserInfo() {
@@ -138,22 +183,31 @@ async function loadMyTournaments() {
 }
 
 function displayMyTournaments(tournaments) {
-  const container = document.getElementById('my-tournaments-container');
-  if (!container) return;
-
-  if (tournaments.length === 0) {
-    container.innerHTML = '<p>У вас пока нет созданных турниров</p>';
-    return;
-  }
-
-  container.innerHTML = tournaments.map(tournament => `
-    <div class="tournament-item">
-      <h4>${tournament.title}</h4>
-      <p>${tournament.description}</p>
-      <p>Статус: ${tournament.status}</p>
-      <p>Город: ${tournament.city}</p>
+  // Создаем модальное окно для отображения турниров
+  const modal = document.createElement('div');
+  modal.className = 'modern-modal show';
+  modal.innerHTML = `
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Мои турниры</h5>
+        <button class="modal-close" onclick="this.closest('.modern-modal').remove()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="my-tournaments-container">
+          ${tournaments.length === 0 ? '<p>У вас пока нет созданных турниров</p>' : 
+            tournaments.map(tournament => `
+              <div class="tournament-item" style="border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px;">
+                <h4 style="margin: 0 0 10px 0; color: #333;">${tournament.title}</h4>
+                <p style="margin: 0 0 10px 0; color: #666;">${tournament.description}</p>
+                <p style="margin: 0 0 5px 0; color: #888;">Статус: ${tournament.status}</p>
+                <p style="margin: 0; color: #888;">Город: ${tournament.city}</p>
+              </div>
+            `).join('')}
+        </div>
+      </div>
     </div>
-  `).join('');
+  `;
+  document.body.appendChild(modal);
 }
 
 // Функции для товаров
@@ -167,22 +221,31 @@ async function loadMyProducts() {
 }
 
 function displayMyProducts(products) {
-  const container = document.getElementById('my-products-container');
-  if (!container) return;
-
-  if (products.length === 0) {
-    container.innerHTML = '<p>У вас пока нет созданных товаров</p>';
-    return;
-  }
-
-  container.innerHTML = products.map(product => `
-    <div class="product-item">
-      <h4>${product.title}</h4>
-      <p>${product.description}</p>
-      <p>Цена: ${product.price}₸</p>
-      <p>Город: ${product.city}</p>
+  // Создаем модальное окно для отображения товаров
+  const modal = document.createElement('div');
+  modal.className = 'modern-modal show';
+  modal.innerHTML = `
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Мои товары</h5>
+        <button class="modal-close" onclick="this.closest('.modern-modal').remove()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="my-products-container">
+          ${products.length === 0 ? '<p>У вас пока нет созданных товаров</p>' : 
+            products.map(product => `
+              <div class="product-item" style="border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px;">
+                <h4 style="margin: 0 0 10px 0; color: #333;">${product.title}</h4>
+                <p style="margin: 0 0 10px 0; color: #666;">${product.description}</p>
+                <p style="margin: 0 0 5px 0; color: #888;">Цена: ${product.price}₸</p>
+                <p style="margin: 0; color: #888;">Город: ${product.city}</p>
+              </div>
+            `).join('')}
+        </div>
+      </div>
     </div>
-  `).join('');
+  `;
+  document.body.appendChild(modal);
 }
 
 // Функции для команд
@@ -196,22 +259,31 @@ async function loadMyTeams() {
 }
 
 function displayMyTeams(teams) {
-  const container = document.getElementById('my-teams-container');
-  if (!container) return;
-
-  if (teams.length === 0) {
-    container.innerHTML = '<p>У вас пока нет созданных команд</p>';
-    return;
-  }
-
-  container.innerHTML = teams.map(team => `
-    <div class="team-item">
-      <h4>${team.name}</h4>
-      <p>${team.description}</p>
-      <p>Участники: ${team.members.join(', ')}</p>
-      <p>Город: ${team.city}</p>
+  // Создаем модальное окно для отображения команд
+  const modal = document.createElement('div');
+  modal.className = 'modern-modal show';
+  modal.innerHTML = `
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Мои команды</h5>
+        <button class="modal-close" onclick="this.closest('.modern-modal').remove()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="my-teams-container">
+          ${teams.length === 0 ? '<p>У вас пока нет созданных команд</p>' : 
+            teams.map(team => `
+              <div class="team-item" style="border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px;">
+                <h4 style="margin: 0 0 10px 0; color: #333;">${team.name}</h4>
+                <p style="margin: 0 0 10px 0; color: #666;">${team.description}</p>
+                <p style="margin: 0 0 5px 0; color: #888;">Участники: ${team.members.join(', ')}</p>
+                <p style="margin: 0; color: #888;">Город: ${team.city}</p>
+              </div>
+            `).join('')}
+        </div>
+      </div>
     </div>
-  `).join('');
+  `;
+  document.body.appendChild(modal);
 }
 
 // Универсальные функции
