@@ -2,21 +2,30 @@
   "version": 2,
   "builds": [
     {
-      "src": "backend/server.js",
-      "use": "@vercel/node"
+      "src": "*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "files/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "products/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "tournaments/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/backend/server.js"
+      "src": "/",
+      "dest": "/index.html"
     },
     {
       "src": "/(.*)",
-      "dest": "/backend/server.js"
+      "dest": "/$1"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 } 
