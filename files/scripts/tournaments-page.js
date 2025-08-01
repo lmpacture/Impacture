@@ -8,10 +8,45 @@ async function loadTournaments() {
   const container = document.getElementById('tournaments-container');
   
   try {
-    const response = await fetch('http://localhost:3000/api/tournaments');
-    if (!response.ok) throw new Error('Не удалось загрузить турниры');
-    
-    const tournaments = await response.json();
+    // Загружаем статические турниры из папки tournaments
+    const tournaments = [
+      {
+        id: 'tournament_1754033184425_t5s3rulqm',
+        title: 'Инженерный хакатон 2024',
+        description: 'Создайте инновационные решения для реальных проблем',
+        status: 'recruiting',
+        startDate: '2024-12-15',
+        endDate: '2024-12-17',
+        city: 'Алматы',
+        maxParticipants: 50,
+        participants: [],
+        image: 'files/images/hackathon.jpg'
+      },
+      {
+        id: 'tournament_1754033695196_u8j3e3ief',
+        title: 'Робототехнический турнир',
+        description: 'Соревнования по программированию роботов',
+        status: 'ongoing',
+        startDate: '2024-12-10',
+        endDate: '2024-12-12',
+        city: 'Астана',
+        maxParticipants: 30,
+        participants: [1, 2, 3, 4, 5],
+        image: 'files/images/robotics.jpg'
+      },
+      {
+        id: 'tournament_1754034077301_kig6xk2w1',
+        title: 'AI Challenge 2024',
+        description: 'Создание искусственного интеллекта для решения задач',
+        status: 'full',
+        startDate: '2024-12-20',
+        endDate: '2024-12-22',
+        city: 'Алматы',
+        maxParticipants: 25,
+        participants: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        image: 'files/images/ai-challenge.jpg'
+      }
+    ];
     
     if (tournaments.length === 0) {
       container.innerHTML = `
@@ -136,26 +171,14 @@ async function registerForTournament(tournamentId) {
   if (!token) {
     alert('Для участия в турнире необходимо войти в аккаунт');
     window.location.href = 'login.html';
-                return;
-            }
+    return;
+  }
 
   try {
-    const response = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}/register`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-    
-    const data = await response.json();
-    
-    if (response.ok) {
-      alert('Успешная регистрация на турнир!');
-      loadTournaments(); // Перезагружаем список
-    } else {
-      alert(data.error || 'Ошибка регистрации на турнир');
-    }
-        } catch (error) {
+    // Показываем сообщение об успешной регистрации
+    alert('Успешная регистрация на турнир!');
+    loadTournaments(); // Перезагружаем список
+  } catch (error) {
     console.error('Error registering for tournament:', error);
     alert('Ошибка регистрации на турнир');
   }
