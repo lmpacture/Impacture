@@ -41,25 +41,20 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(async () => {
           console.log('Checking if openChat exists:', typeof window.openChat);
           if (window.openChat) {
-            // Получаем данные продавца
+            // Имитируем данные продавца без API
             try {
-              const response = await fetch(`/api/users/${sellerId}`);
-              if (response.ok) {
-                const seller = await response.json();
-                const sellerName = `${seller.firstName} ${seller.lastName}`;
-                
-                window.openChat(sellerId, sellerName, JSON.stringify({
-                  id: productId,
-                  title: productTitle,
-                  price: productPrice
-                }));
-              } else {
-                window.openChat(sellerId, 'Продавец', JSON.stringify({
-                  id: productId,
-                  title: productTitle,
-                  price: productPrice
-                }));
-              }
+              // Статические данные продавца
+              const seller = {
+                firstName: 'Демо',
+                lastName: 'Продавец'
+              };
+              const sellerName = `${seller.firstName} ${seller.lastName}`;
+              
+              window.openChat(sellerId, sellerName, JSON.stringify({
+                id: productId,
+                title: productTitle,
+                price: productPrice
+              }));
             } catch (error) {
               console.error('Error loading seller data:', error);
               window.openChat(sellerId, 'Продавец', JSON.stringify({
