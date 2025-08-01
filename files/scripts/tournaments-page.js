@@ -8,45 +8,8 @@ async function loadTournaments() {
   const container = document.getElementById('tournaments-container');
   
   try {
-    // Загружаем статические турниры из папки tournaments
-    const tournaments = [
-      {
-        id: 'tournament_1754033184425_t5s3rulqm',
-        title: 'Инженерный хакатон 2024',
-        description: 'Создайте инновационные решения для реальных проблем',
-        status: 'recruiting',
-        startDate: '2024-12-15',
-        endDate: '2024-12-17',
-        city: 'Алматы',
-        maxParticipants: 50,
-        participants: [],
-        image: 'files/images/impacture.png'
-      },
-      {
-        id: 'tournament_1754033695196_u8j3e3ief',
-        title: 'Робототехнический турнир',
-        description: 'Соревнования по программированию роботов',
-        status: 'ongoing',
-        startDate: '2024-12-10',
-        endDate: '2024-12-12',
-        city: 'Астана',
-        maxParticipants: 30,
-        participants: [1, 2, 3, 4, 5],
-        image: 'files/images/impacture.png'
-      },
-      {
-        id: 'tournament_1754034077301_kig6xk2w1',
-        title: 'AI Challenge 2024',
-        description: 'Создание искусственного интеллекта для решения задач',
-        status: 'full',
-        startDate: '2024-12-20',
-        endDate: '2024-12-22',
-        city: 'Алматы',
-        maxParticipants: 25,
-        participants: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        image: 'files/images/impacture.png'
-      }
-    ];
+    // Пустой массив турниров
+    const tournaments = [];
     
     if (tournaments.length === 0) {
       container.innerHTML = `
@@ -61,15 +24,9 @@ async function loadTournaments() {
       return;
     }
     
-    // Сортируем турниры: сначала идущие, потом набор, потом завершенные
-    tournaments.sort((a, b) => {
-      const statusOrder = { 'ongoing': 0, 'recruiting': 1, 'full': 2, 'completed': 3 };
-      return statusOrder[a.status] - statusOrder[b.status];
-    });
-    
     container.innerHTML = tournaments.map(tournament => createTournamentCard(tournament)).join('');
     
-    // Добавляем обработчики для кнопок регистрации
+    // Добавляем обработчики для кнопок
     tournaments.forEach(tournament => {
       const registerBtn = document.getElementById(`register-${tournament.id}`);
       if (registerBtn) {
@@ -80,13 +37,12 @@ async function loadTournaments() {
   } catch (error) {
     console.error('Error loading tournaments:', error);
     container.innerHTML = `
-      <div class="error">
+      <div class="text-center py-5">
         <div class="mb-4">
           <i class="bi bi-exclamation-triangle" style="font-size: 3rem; color: #ef4444;"></i>
         </div>
-        <h3 class="text-red-600 mb-2">Ошибка загрузки</h3>
-        <p class="text-red-500">Не удалось загрузить турниры. Попробуйте обновить страницу.</p>
-        <button class="btn btn-primary mt-3" onclick="loadTournaments()">Попробовать снова</button>
+        <h3 class="text-gray-600 mb-2">Ошибка загрузки турниров</h3>
+        <p class="text-gray-500">Попробуйте обновить страницу</p>
       </div>
     `;
   }

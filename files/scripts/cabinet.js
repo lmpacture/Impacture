@@ -91,85 +91,10 @@ async function loadUserInfo() {
 
 // Инициализация статических данных
 function initializeStaticData() {
-  // Статические турниры
-  allTournaments = [
-    {
-      id: 'tournament_1',
-      title: 'Инженерный хакатон 2024',
-      description: 'Создайте инновационные решения для реальных проблем',
-      status: 'recruiting',
-      startDate: '2024-12-15',
-      endDate: '2024-12-17',
-      city: 'Алматы',
-      maxParticipants: 50,
-      participants: [],
-      createdBy: 'demo-user-1'
-    },
-    {
-      id: 'tournament_2',
-      title: 'Робототехнический турнир',
-      description: 'Соревнования по программированию роботов',
-      status: 'ongoing',
-      startDate: '2024-12-10',
-      endDate: '2024-12-12',
-      city: 'Астана',
-      maxParticipants: 30,
-      participants: [1, 2, 3, 4, 5],
-      createdBy: 'demo-user-1'
-    }
-  ];
-
-  // Статические товары
-  allProducts = [
-    {
-      id: 'product_1',
-      title: 'Arduino Uno R3',
-      description: 'Микроконтроллер для проектов робототехники',
-      price: 15000,
-      condition: 'new',
-      category: 'electronics',
-      city: 'Алматы',
-      images: ['files/images/impacture.png'],
-      createdBy: 'demo-user-1'
-    },
-    {
-      id: 'product_2',
-      title: 'Raspberry Pi 4 Model B',
-      description: 'Одноплатный компьютер для разработки',
-      price: 45000,
-      condition: 'used',
-      category: 'electronics',
-      city: 'Астана',
-      images: ['files/images/impacture.png'],
-      createdBy: 'demo-user-1'
-    }
-  ];
-
-  // Статические команды
-  allTeams = [
-    {
-      id: 'team_1',
-      name: 'FoxGang',
-      description: 'Команда разработчиков игр и приложений',
-      members: ['Алексей', 'Мария', 'Дмитрий'],
-      maxMembers: 5,
-      city: 'Алматы',
-      image: 'files/images/impacture.png',
-      status: 'recruiting',
-      createdBy: 'demo-user-1'
-    },
-    {
-      id: 'team_2',
-      name: 'SlapSeals',
-      description: 'Команда робототехников и инженеров',
-      members: ['Елена', 'Артем', 'София'],
-      maxMembers: 4,
-      city: 'Астана',
-      image: 'files/images/impacture.png',
-      status: 'full',
-      createdBy: 'demo-user-1'
-    }
-  ];
+  // Пустые массивы
+  allTournaments = [];
+  allProducts = [];
+  allTeams = [];
 }
 
 // Функции для турниров

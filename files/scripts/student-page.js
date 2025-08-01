@@ -39,49 +39,8 @@ async function loadTeams() {
   }
   
   try {
-    // Статические данные команд
-    const teams = [
-      {
-        id: 'team_1',
-        name: 'FoxGang',
-        description: 'Команда разработчиков игр и приложений',
-        members: ['Алексей', 'Мария', 'Дмитрий'],
-        maxMembers: 5,
-        city: 'Алматы',
-        image: 'files/images/impacture.png',
-        status: 'recruiting'
-      },
-      {
-        id: 'team_2',
-        name: 'SlapSeals',
-        description: 'Команда робототехников и инженеров',
-        members: ['Елена', 'Артем', 'София'],
-        maxMembers: 4,
-        city: 'Астана',
-        image: 'files/images/impacture.png',
-        status: 'full'
-      },
-      {
-        id: 'team_3',
-        name: 'Fantast_6',
-        description: 'Команда AI и машинного обучения',
-        members: ['Иван', 'Анна', 'Павел', 'Ольга'],
-        maxMembers: 6,
-        city: 'Алматы',
-        image: 'files/images/impacture.png',
-        status: 'recruiting'
-      },
-      {
-        id: 'team_4',
-        name: 'Fizmat Tech',
-        description: 'Команда физиков и математиков',
-        members: ['Сергей', 'Наталья'],
-        maxMembers: 5,
-        city: 'Астана',
-        image: 'files/images/impacture.png',
-        status: 'recruiting'
-      }
-    ];
+    // Пустой массив команд
+    const teams = [];
     
     if (teams.length === 0) {
       container.innerHTML = `

@@ -139,24 +139,8 @@ async function loadChats() {
             return;
         }
 
-        // Имитируем загрузку чатов без API
-        allChats = [
-            {
-                userId: 'user_1',
-                userEmail: 'alex@example.com',
-                lastMessage: 'Привет! Интересует ваш товар',
-                productInfo: {
-                    title: 'Arduino Uno R3',
-                    price: 15000
-                }
-            },
-            {
-                userId: 'user_2', 
-                userEmail: 'maria@example.com',
-                lastMessage: 'Спасибо за информацию!',
-                productInfo: null
-            }
-        ];
+        // Пустой массив чатов
+        allChats = [];
         
         await displayChats();
     } catch (error) {
