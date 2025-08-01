@@ -42,7 +42,7 @@ async function loadTeams() {
         members: ['Алексей', 'Мария', 'Дмитрий'],
         maxMembers: 5,
         city: 'Алматы',
-        image: 'files/images/teams/FoxGang/team_logo.png',
+        image: 'files/images/impacture.png',
         status: 'recruiting'
       },
       {
@@ -52,7 +52,7 @@ async function loadTeams() {
         members: ['Елена', 'Артем', 'София'],
         maxMembers: 4,
         city: 'Астана',
-        image: 'files/images/teams/SlapSeals/team_logo.png',
+        image: 'files/images/impacture.png',
         status: 'full'
       },
       {
@@ -62,7 +62,7 @@ async function loadTeams() {
         members: ['Иван', 'Анна', 'Павел', 'Ольга'],
         maxMembers: 6,
         city: 'Алматы',
-        image: 'files/images/teams/fantast_6/team_logo.png',
+        image: 'files/images/impacture.png',
         status: 'recruiting'
       },
       {
@@ -72,7 +72,7 @@ async function loadTeams() {
         members: ['Сергей', 'Наталья'],
         maxMembers: 5,
         city: 'Астана',
-        image: 'files/images/teams/fizmat tech/team_logo.png',
+        image: 'files/images/impacture.png',
         status: 'recruiting'
       }
     ];
@@ -103,13 +103,12 @@ async function loadTeams() {
   } catch (error) {
     console.error('Error loading teams:', error);
     container.innerHTML = `
-      <div class="error">
+      <div class="text-center py-5">
         <div class="mb-4">
           <i class="bi bi-exclamation-triangle" style="font-size: 3rem; color: #ef4444;"></i>
         </div>
-        <h3 class="text-red-600 mb-2">Ошибка загрузки</h3>
-        <p class="text-red-500">Не удалось загрузить команды. Попробуйте обновить страницу.</p>
-        <button class="btn btn-primary mt-3" onclick="loadTeams()">Попробовать снова</button>
+        <h3 class="text-gray-600 mb-2">Ошибка загрузки команд</h3>
+        <p class="text-gray-500">Попробуйте обновить страницу</p>
       </div>
     `;
   }
