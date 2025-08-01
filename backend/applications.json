@@ -1,0 +1,37 @@
+[
+  {
+    "id": "app_1754032000000_test123",
+    "teamId": "team_1753962000000_fantast_6",
+    "userId": "1752681923573",
+    "userEmail": "aseikenov@gmail.com",
+    "userName": "Али С",
+    "message": "Привет! Я очень заинтересован в присоединении к вашей команде. У меня есть опыт в веб-разработке и я хотел бы внести свой вклад в создание инновационных проектов.",
+    "status": "approved",
+    "createdAt": "2025-08-01T08:00:00.000Z",
+    "processedAt": "2025-08-01T09:38:38.651Z",
+    "processedBy": "1752680496668"
+  },
+  {
+    "id": "app_1754032000001_test456",
+    "teamId": "team_1753962000002_foxgang",
+    "userId": "1752680496668",
+    "userEmail": "seikenov63@gmail.com",
+    "userName": "Али Сейкенов",
+    "message": "Здравствуйте! Я увлекаюсь игровой разработкой и хотел бы присоединиться к вашей команде. У меня есть опыт в Unity и C#.",
+    "status": "rejected",
+    "createdAt": "2025-08-01T09:00:00.000Z",
+    "processedAt": "2025-08-01T09:38:36.994Z",
+    "processedBy": "1752680496668"
+  },
+  {
+    "id": "app_1754039652392_gqy7l8wrz",
+    "teamId": "team_1753962000002_foxgang",
+    "userId": "1752681923573",
+    "userName": "undefined undefined",
+    "message": "да",
+    "status": "rejected",
+    "createdAt": "2025-08-01T09:14:12.392Z",
+    "processedAt": "2025-08-01T09:38:31.141Z",
+    "processedBy": "1752680496668"
+  }
+]

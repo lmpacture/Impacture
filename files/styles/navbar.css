@@ -1,0 +1,223 @@
+/* Основные стили навбара */
+.navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Логотип и название */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.navbar-logo {
+    width: 3rem;
+    height: 3rem;
+    color: #141414;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.navbar-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #141414;
+    margin: 0;
+}
+
+/* Навигационные ссылки */
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-left: 2rem;
+}
+
+.navbar-link {
+    text-decoration: none;
+    color: #6b7280;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: color 0.2s ease;
+    padding: 0.5rem 0;
+}
+
+.navbar-link:hover {
+    color: #141414;
+}
+
+.navbar-link.active {
+    color: #141414;
+    font-weight: 600;
+}
+
+/* Пустое пространство */
+.navbar-spacer {
+    flex: 1;
+}
+
+/* Правая часть навбара */
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+}
+
+/* Кнопки авторизации */
+.auth-buttons {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.auth-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.auth-btn-primary {
+    background-color: #141414;
+    color: white;
+}
+
+.auth-btn-primary:hover {
+    background-color: #374151;
+}
+
+.auth-btn-secondary {
+    background-color: transparent;
+    color: #141414;
+    border: 1px solid #d1d5db;
+}
+
+.auth-btn-secondary:hover {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+}
+
+/* Мобильное меню */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.mobile-nav {
+    display: none;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+}
+
+.mobile-nav.active {
+    display: block;
+    transform: translateY(0);
+}
+
+.mobile-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+    z-index: 10000;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-close-btn:hover {
+    background-color: #f5f5f5;
+}
+
+.mobile-close-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .navbar-container {
+        padding: 1rem;
+    }
+    
+    .navbar-links {
+        display: none;
+    }
+    
+    .navbar-spacer {
+        display: none;
+    }
+    
+    .mobile-menu-btn {
+        display: block;
+    }
+    
+    .auth-buttons {
+        display: none;
+    }
+    
+    .mobile-nav {
+        display: block;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: white;
+        border-top: 1px solid #e5e7eb;
+        padding: 1rem;
+    }
+    
+    .mobile-nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        margin-top: 60px;
+    }
+    
+    .mobile-nav li {
+        margin-bottom: 0.5rem;
+    }
+    
+    .mobile-nav a {
+        display: block;
+        padding: 0.5rem 0;
+        color: #6b7280;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .mobile-nav a:hover {
+        color: #141414;
+    }
+} 

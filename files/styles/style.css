@@ -1,0 +1,87 @@
+
+.main {
+    text-align: center;
+
+}
+
+section>h2{
+    margin: 1em;
+}
+.sidebar {
+  width: 100%;
+  overflow-wrap: break-word;
+}
+
+/* Стили для навигации */
+.navbar-nav .nav-link {
+    font-weight: 400 !important;
+    color: #333 !important;
+}
+.navbar-nav .nav-link:hover {
+    color: #2c3e50 !important;
+}
+
+.main-navbar {
+  width: 100%;
+  background: #fff;
+  box-shadow: 0 2px 8px #0001;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.main-navbar .nav-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 56px;
+}
+.main-navbar .nav-logo {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #4078c0;
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+.main-navbar .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.main-navbar .nav-links a {
+  color: #4078c0;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 7px 16px;
+  border-radius: 5px;
+  transition: background 0.15s;
+}
+.main-navbar .nav-links a:hover {
+  background: #f0f4fa;
+}
+.main-navbar .nav-btn {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 7px 16px;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.main-navbar .nav-btn:hover {
+  background: #c0392b;
+}
+
+/* --- Marketplace custom styles --- */
+#cart-items li, #history-list li { font-size: 16px; }
+.card { box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+.navbar-brand img { height: 32px; margin-right: 8px; }
+.size-4 { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+
+

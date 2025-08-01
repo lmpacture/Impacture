@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Инженерные команды учеников - Impacture</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Noto+Sans:wght@400;500;700;900&display=swap"
+    />
+    <link rel="stylesheet" href="files/styles/home.css">
+    <link rel="stylesheet" href="files/styles/mobile.css">
+    <link rel="stylesheet" href="files/styles/desktop.css">
+    <link rel="stylesheet" href="files/styles/navbar.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WGGJDNZHJC"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    
+    <style>
+      body {
+        font-family: "Manrope", "Noto Sans", sans-serif;
+      }
+      
+      /* Мобильная навигация */
+      .mobile-menu-btn {
+          display: none;
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0.5rem;
+      }
+
+      .mobile-menu-btn svg {
+          width: 24px;
+          height: 24px;
+      }
+
+      .mobile-nav {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: white;
+          z-index: 1000;
+          padding: 2rem;
+          overflow-y: auto;
+      }
+
+      .mobile-nav.active {
+          display: block;
+      }
+
+      .mobile-close-btn {
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0.5rem;
+          border-radius: 50%;
+          transition: background-color 0.2s ease;
+          z-index: 10000;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+      }
+
+      .mobile-close-btn:hover {
+          background-color: #f5f5f5;
+      }
+
+      .mobile-close-btn svg {
+          width: 24px;
+          height: 24px;
+      }
+
+      .mobile-nav ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          margin-top: 60px;
+      }
+
+      .mobile-nav li {
+          margin-bottom: 1.5rem;
+      }
+
+      .mobile-nav a {
+          display: block;
+          padding: 0.75rem 0;
+          color: #141414;
+          text-decoration: none;
+          font-size: 1.1rem;
+          font-weight: 500;
+          border-radius: 0.5rem;
+          transition: background-color 0.2s ease;
+      }
+
+      .mobile-nav a:hover {
+          background-color: #f5f5f5;
+      }
+
+      .mobile-nav a.button {
+          display: inline-block;
+          padding: 1rem 2rem;
+          background: #141414;
+          color: white;
+          border-radius: 0.75rem;
+          text-align: center;
+          font-weight: 600;
+      }
+
+      /* Стили для кнопки чата */
+      .chat-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 50%;
+        transition: background-color 0.2s ease;
+        margin-right: 10px;
+      }
+
+      .chat-btn:hover {
+        background-color: #f5f5f5;
+      }
+
+      .chat-btn svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      /* Стили для нового Instagram-подобного чата */
+      .chat-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        backdrop-filter: blur(5px);
+      }
+
+      .chat-modal.show {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .chat-modal-content {
+        background: white;
+        border-radius: 16px;
+        width: 95%;
+        max-width: 800px;
+        height: 90%;
+        max-height: 800px;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideIn 0.3s ease-out;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .chat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 25px;
+        border-bottom: 1px solid #e9ecef;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 16px 16px 0 0;
+      }
+
+      .chat-header h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+
+      .chat-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: background 0.2s;
+      }
+
+      .chat-close:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .chat-body {
+        flex: 1;
+        display: flex;
+        overflow: hidden;
+      }
+
+      .chat-list {
+        width: 300px;
+        border-right: 1px solid #e0e0e0;
+        overflow-y: auto;
+      }
+
+      .chat-item {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid #f0f0f0;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+      }
+
+      .chat-item:hover {
+        background-color: #f8f9fa;
+      }
+
+      .chat-item.active {
+        background-color: #e3f2fd;
+      }
+
+      .chat-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #667eea;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        margin-right: 12px;
+      }
+
+      .chat-info {
+        flex: 1;
+      }
+
+      .chat-name {
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+
+              .chat-last-message {
+            color: #666;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-product-info {
+            margin-top: 4px;
+        }
+
+        .chat-product-info small {
+            color: #667eea;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+      .chat-messages {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .chat-messages-header {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid #e0e0e0;
+        background: #f8f9fa;
+      }
+
+      .back-to-chats {
+        background: none;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        color: #666;
+        margin-right: 15px;
+      }
+
+      .messages-container {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+      }
+
+      .message {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .message.sent {
+        align-items: flex-end;
+      }
+
+      .message.received {
+        align-items: flex-start;
+      }
+
+      .message-content {
+        max-width: 70%;
+        padding: 12px 16px;
+        border-radius: 18px;
+        word-wrap: break-word;
+      }
+
+      .message.sent .message-content {
+        background: #667eea;
+        color: white;
+      }
+
+      .message.received .message-content {
+        background: #f0f0f0;
+        color: #333;
+      }
+
+      .message-image {
+        max-width: 200px;
+        max-height: 200px;
+        border-radius: 12px;
+        cursor: pointer;
+      }
+
+      .message-time {
+        font-size: 12px;
+        color: #999;
+        margin-top: 4px;
+      }
+
+      .message-input-container {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        border-top: 1px solid #e0e0e0;
+        background: white;
+      }
+
+      .attach-file-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+        margin-right: 10px;
+      }
+
+      .attach-file-btn svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      #message-input {
+        flex: 1;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        padding: 10px 15px;
+        margin-right: 10px;
+        outline: none;
+      }
+
+      #send-message-btn {
+        background: #667eea;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      #send-message-btn:hover {
+        background: #5a6fd8;
+      }
+
+      .no-chats {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: #666;
+        font-style: italic;
+      }
+      
+      /* Адаптивные стили */
+      @media (max-width: 768px) {
+        .navbar-container {
+          padding: 1rem;
+        }
+        
+        .navbar-links {
+          display: none;
+        }
+        
+        .navbar-spacer {
+          display: none;
+        }
+        
+        .mobile-menu-btn {
+          display: block;
+        }
+        
+        .auth-buttons {
+          display: none;
+        }
+        
+        .mobile-nav {
+          display: block;
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          background-color: white;
+          border-top: 1px solid #e5e7eb;
+          padding: 1rem;
+        }
+        
+        .mobile-nav ul {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+        
+        .mobile-nav li {
+          margin-bottom: 0.5rem;
+        }
+        
+        .mobile-nav a {
+          display: block;
+          padding: 0.5rem 0;
+          color: #6b7280;
+          text-decoration: none;
+          font-weight: 500;
+        }
+        
+        .mobile-nav a:hover {
+          color: #141414;
+        }
+        
+        .chat-modal-content {
+          width: 100%;
+          height: 100%;
+          border-radius: 0;
+          max-width: none;
+          max-height: none;
+        }
+        
+        .chat-header {
+          padding: 15px 20px;
+        }
+        
+        .chat-list {
+          width: 100%;
+          border-right: none;
+        }
+        
+        .chat-messages {
+          display: none;
+        }
+        
+        .chat-messages.active {
+          display: flex;
+          flex-direction: column;
+        }
+        
+        .hero-title {
+          font-size: 2.5rem;
+        }
+        
+        .hero-subtitle {
+          font-size: 1rem;
+        }
+        
+        .mobile-nav a {
+          font-size: 1rem;
+        }
+        
+        .mobile-nav a.button {
+          padding: 0.875rem 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body class="home-container">
+    <div
+      class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden"
+    >
+      <!-- Навигационная панель -->
+      <header class="navbar-container">
+            <div class="navbar-brand">
+                <div class="navbar-logo">
+                    <img src="files/images/impacture.png" alt="Impacture Logo" class="navbar-logo-img">
+                </div>
+                <h2 class="navbar-title">Impacture</h2>
+            </div>
+            <div class="navbar-links">
+                <a href="index.html" class="navbar-link">Главная</a>
+                <a href="student-page.html" class="navbar-link active">Команды</a>
+                <a href="tournaments-page.html" class="navbar-link">Турниры</a>
+                <a href="marketplace.html" class="navbar-link">Маркетплейс</a>
+            </div>
+            <div class="navbar-spacer"></div>
+            <div class="navbar-right">
+                <div id="auth-buttons" class="auth-buttons">
+                    <!-- Кнопки будут добавлены через JS -->
+                </div>
+                <button id="chat-btn" class="chat-btn" title="Сообщения">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="mobile-nav">
+                    <button class="mobile-close-btn">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 6L6 18M6 6l12 12" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <ul>
+                        <li><a href="index.html">Главная</a></li>
+                        <li><a href="student-page.html">Команды</a></li>
+                        <li><a href="tournaments-page.html">Турниры</a></li>
+                        <li><a href="marketplace.html">Маркетплейс</a></li>
+                    </ul>
+                    <!-- Кнопки входа/регистрации добавляются через JS -->
+                </div>
+                <button class="mobile-menu-btn">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 6h18M3 12h18M3 18h18" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+      <div class="gap-1 px-6 flex flex-1 justify-center py-5">
+        <div
+          class="layout-content-container flex flex-col max-w-[960px] flex-1"
+        >
+          <div class="flex flex-wrap justify-between gap-3 p-4">
+            <p
+              class="text-[#141414] tracking-light text-[32px] font-bold leading-tight min-w-72"
+            >
+              Инженерные команды
+            </p>
+          </div>
+          <div
+            class="grid grid-cols-4 gap-4 p-4"
+          >
+            <!-- Команды будут загружены динамически через JavaScript -->
+          </div>
+        </div>
+      </div>
+      <!-- Пагинация внизу страницы -->
+      <div class="flex items-center justify-center p-4 mt-8">
+        <div class="flex items-center gap-2">
+          <a
+            href="#"
+            class="text-sm font-normal leading-normal flex size-10 items-center justify-center text-[#141414] rounded-full hover:bg-gray-100"
+            >1</a
+          >
+          <a
+            class="text-sm font-normal leading-normal flex size-10 items-center justify-center text-[#141414] rounded-full hover:bg-gray-100"
+            >2</a
+          >
+          <a
+            class="text-sm font-normal leading-normal flex size-10 items-center justify-center text-[#141414] rounded-full hover:bg-gray-100"
+            >3</a
+          >
+          <a
+            class="text-sm font-normal leading-normal flex size-10 items-center justify-center text-[#141414] rounded-full hover:bg-gray-100"
+            >4</a
+          >
+          <a
+            class="text-sm font-normal leading-normal flex size-10 items-center justify-center text-[#141414] rounded-full hover:bg-gray-100"
+            >5</a
+          >
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+    <!-- Модальное окно чата -->
+    <div id="chat-modal" class="chat-modal">
+      <div class="chat-modal-content">
+        <div class="chat-header">
+          <h3>💬 Сообщения</h3>
+          <button class="chat-close" id="close-chat-modal">&times;</button>
+        </div>
+        <div class="chat-body">
+          <div class="chat-list" id="chat-list">
+            <!-- Список чатов будет загружен через JS -->
+          </div>
+          <div class="chat-messages" id="chat-messages" style="display: none;">
+            <div class="chat-messages-header">
+              <button class="back-to-chats" id="back-to-chats">&larr; Назад</button>
+              <span id="current-chat-user"></span>
+            </div>
+            <div class="messages-container" id="messages-container">
+              <!-- Сообщения будут загружены через JS -->
+            </div>
+            <div class="message-input-container">
+              <input type="file" id="chat-file-input" accept="image/*" style="display: none;">
+              <button class="attach-file-btn" id="attach-file-btn">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <input type="text" id="message-input" placeholder="Введите сообщение...">
+              <button id="send-message-btn">Отправить</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="files/scripts/student-page.js"></script>
+    <script src="files/scripts/site.js"></script>
+    <script src="files/scripts/chat.js"></script>
+  </body>
+</html>

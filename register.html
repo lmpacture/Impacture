@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Регистрация</title>
+  <link rel="stylesheet" href="files/styles/style.css">
+  <style>
+    body { background: #f5f6fa; font-family: 'Segoe UI', sans-serif; }
+    .reg-container { max-width: 400px; margin: 60px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 16px #0001; padding: 32px 28px; }
+    .reg-container h2 { text-align: center; margin-bottom: 24px; }
+    .reg-container label { display: block; margin-bottom: 6px; font-weight: 500; }
+    .reg-container input { width: 100%; padding: 10px; margin-bottom: 18px; border: 1px solid #dcdde1; border-radius: 6px; font-size: 1rem; }
+    .reg-container button { width: 100%; padding: 12px; background: #4078c0; color: #fff; border: none; border-radius: 6px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .reg-container button:hover { background: #305a8d; }
+    .reg-container .link { display: block; text-align: center; margin-top: 12px; color: #4078c0; text-decoration: none; }
+    .reg-container .link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="reg-container">
+    <h2>Регистрация</h2>
+    <form id="register-form" novalidate>
+      <label for="email">Email</label>
+      <input type="text" id="email" name="email" required autocomplete="email" placeholder="Введите email">
+      <label for="password">Пароль</label>
+      <input type="password" id="password" name="password" required autocomplete="new-password">
+      <label for="firstName">Имя</label>
+      <input type="text" id="firstName" name="firstName" required>
+      <label for="lastName">Фамилия</label>
+      <input type="text" id="lastName" name="lastName" required>
+      <button type="submit">Зарегистрироваться</button>
+    </form>
+    <a class="link" href="login.html">Уже есть аккаунт? Войти</a>
+  </div>
+  <script src="files/scripts/site.js"></script>
+</body>
+</html> 

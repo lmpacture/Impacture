@@ -1,0 +1,100 @@
+.grid.grid-cols-1 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.relative.aspect-video {
+    height: 200px;
+}
+
+/* Стили для десктопной версии */
+
+/* Общие стили */
+.layout-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Стили для навигации */
+header {
+  padding: 1rem 2rem;
+  gap: 2rem;
+}
+
+/* Стили для карточек */
+.team-card {
+  min-width: 200px;
+  max-width: 200px;
+}
+
+/* Стили для галереи */
+.team-gallery {
+  gap: 1rem;
+  padding: 1rem;
+}
+
+/* Стили для кнопок */
+.button {
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+}
+
+/* Стили для заголовков */
+.hero-title {
+  font-size: 3rem;
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  line-height: 1.6;
+}
+
+/* Стили для текста */
+.text-content {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Стили для достижений */
+.achievements {
+  gap: 2rem;
+  padding: 2rem;
+}
+
+/* Стили для карточек достижений */
+.achievement-card {
+  min-width: 250px;
+  max-width: 250px;
+}
+
+/* Стили для кнопок достижений */
+.achievement-button {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+/* Стили для навигации достижений */
+.achievement-nav {
+  gap: 1rem;
+  padding: 1rem;
+}
+
+/* Стили для галереи на ПК */
+.flex.items-stretch .flex.flex-col .w-full {
+  min-width: 200px;
+  height: 200px;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  -webkit-transform: scale(1.05);
+  transform: scale(1.05);
+  transition: transform 0.3s ease-in-out;
+}
+
+.flex.items-stretch .flex.flex-col .w-full:hover {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}

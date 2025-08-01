@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Личный кабинет</title>
+  <link rel="stylesheet" href="files/styles/style.css">
+  <link rel="stylesheet" href="files/styles/navbar.css">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.min.css">
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WGGJDNZHJC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  
+  <style>
+    body { background: #f5f6fa; font-family: 'Segoe UI', sans-serif; }
+    .cabinet-container { max-width: 480px; margin: 20px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 16px #0001; padding: 36px 32px; text-align: center; position: relative; }
+    .cabinet-container h2 { margin-bottom: 18px; }
+    .cabinet-container .user-info { margin-bottom: 28px; color: #555; font-size: 1.1rem; }
+    .cabinet-container button { width: 100%; padding: 14px; margin-bottom: 16px; background: #4078c0; color: #fff; border: none; border-radius: 6px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.2s; position: relative; }
+    .cabinet-container button:last-child { background: #e74c3c; margin-bottom: 0; }
+    .cabinet-container button:hover { transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .btn-primary { background: #4078c0; }
+    .btn-danger { background: #e74c3c; }
+    .btn-secondary { background: #6c757d; }
+    
+    /* Современное модальное окно */
+    .modern-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      z-index: 1050;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .modern-modal.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease;
+      position: relative;
+    }
+    
+    .modal-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 25px 30px;
+      border-radius: 20px 20px 0 0;
+      position: relative;
+    }
+    
+    .modal-header h5 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 18px;
+    }
+    
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+    
+    .modal-body {
+      padding: 30px;
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+      font-size: 0.95rem;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e1e5e9;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.3s;
+      background: #f8f9fa;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .form-text {
+      font-size: 0.85rem;
+      color: #6c757d;
+      margin-top: 5px;
+    }
+    
+    .modal-footer {
+      padding: 20px 30px;
+      border-top: 1px solid #e9ecef;
+      display: flex;
+      gap: 15px;
+      justify-content: flex-end;
+    }
+    
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.95rem;
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background: #5a6268;
+      transform: translateY(-1px);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideUp {
+      from { 
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    .required {
+      color: #dc3545;
+    }
+    
+    /* Стили для личного кабинета */
+    .cabinet-sections {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    
+    .section {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid #e9ecef;
+    }
+    
+    .section h3 {
+      margin: 0 0 16px 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .section button {
+      margin-bottom: 12px;
+      width: 100%;
+    }
+    
+    .section button:last-child {
+      margin-bottom: 0;
+    }
+    
+    .btn-info {
+      background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+      color: white;
+    }
+    
+    .btn-info:hover {
+      background: linear-gradient(135deg, #138496 0%, #117a8b 100%);
+      transform: translateY(-1px);
+    }
+    
+    /* Стили для модальных окон */
+    .tournament-list-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      z-index: 1050;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .tournament-list-modal.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .tournament-list-content {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 800px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease;
+    }
+    
+    .tournament-list-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 25px 30px;
+      border-radius: 20px 20px 0 0;
+      position: relative;
+    }
+    
+    .tournament-list-header h5 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    
+    .tournament-list-close {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 18px;
+    }
+    
+    .tournament-list-close:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+    
+    .tournament-list-body {
+      padding: 30px;
+    }
+    
+    .tournament-item {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      border: 1px solid #e9ecef;
+      transition: all 0.3s;
+    }
+    
+    .tournament-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    
+    .tournament-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    
+    .tournament-item-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #333;
+      margin: 0;
+    }
+    
+    .tournament-item-status {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .status-recruiting { background: #28a745; color: white; }
+    .status-full { background: #ffc107; color: #333; }
+    .status-ongoing { background: #007bff; color: white; }
+    .status-completed { background: #6c757d; color: white; }
+    
+    .tournament-item-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .tournament-item-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      border-radius: 6px;
+    }
+    
+    .btn-edit {
+      background: #007bff;
+      color: white;
+    }
+    
+    .btn-delete {
+      background: #dc3545;
+      color: white;
+    }
+    
+    .btn-view {
+      background: #28a745;
+      color: white;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #666;
+    }
+    
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+    
+    /* Стили для загрузки файлов */
+    .file-upload-container {
+      position: relative;
+    }
+    
+    .file-upload-btn {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px dashed #dee2e6;
+      background: #f8f9fa;
+      color: #6c757d;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .file-upload-btn:hover {
+      border-color: #667eea;
+      background: #f0f2ff;
+      color: #667eea;
+    }
+    
+    .file-upload-btn i {
+      font-size: 1.2rem;
+    }
+    
+    .file-info {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: #e8f5e8;
+      border: 1px solid #28a745;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #155724;
+    }
+    
+    .file-name {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    
+    .remove-file-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    
+    .remove-file-btn:hover {
+      background: #c82333;
+      transform: scale(1.1);
+    }
+    
+    .file-preview {
+      margin-top: 10px;
+      max-width: 200px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    /* Стили для предварительного просмотра изображений */
+    .images-preview {
+      margin-top: 15px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 10px;
+      max-height: 200px;
+      overflow-y: auto;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid #e9ecef;
+    }
+    
+    .image-preview-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      transition: all 0.3s;
+    }
+    
+    .image-preview-item:first-child {
+      border-color: #667eea;
+      box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+    }
+    
+    .image-preview-item:first-child::after {
+      content: 'Главная';
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      background: #667eea;
+      color: white;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    
+    .image-preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .image-preview-item .remove-image {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: rgba(220, 53, 69, 0.9);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    
+    .image-preview-item .remove-image:hover {
+      background: #dc3545;
+      transform: scale(1.1);
+    }
+    
+    /* Стили для текущих изображений в редактировании */
+    .current-images-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid #e9ecef;
+    }
+    
+    .current-image-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      transition: all 0.3s;
+    }
+    
+    .current-image-item:first-child {
+      border-color: #667eea;
+      box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+    }
+    
+    .current-image-item:first-child::after {
+      content: 'Главная';
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      background: #667eea;
+      color: white;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    
+    .current-image-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .current-image-item .remove-current-image {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: rgba(220, 53, 69, 0.9);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    
+    .current-image-item .remove-current-image:hover {
+      background: #dc3545;
+      transform: scale(1.1);
+    }
+    
+    /* Стили для списка участников */
+    .participants-list {
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      background: #f8f9fa;
+      padding: 15px;
+    }
+    
+    .participant-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 15px;
+      margin-bottom: 8px;
+      background: white;
+      border-radius: 8px;
+      border: 1px solid #e9ecef;
+      transition: all 0.2s;
+    }
+    
+    .participant-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .participant-item:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transform: translateY(-1px);
+    }
+    
+    .participant-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .participant-avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .participant-name {
+      font-weight: 500;
+      color: #333;
+    }
+    
+    .participant-email {
+      font-size: 12px;
+      color: #6c757d;
+    }
+    
+    .remove-participant-btn {
+      background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .remove-participant-btn:hover {
+      background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+      transform: scale(1.05);
+    }
+    
+    .no-participants {
+      text-align: center;
+      color: #6c757d;
+      font-style: italic;
+      padding: 20px;
+    }
+
+    /* Стили для кнопки чата */
+    .chat-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: background-color 0.2s ease;
+      margin-right: 10px;
+    }
+
+    .chat-btn:hover {
+      background-color: #f5f5f5;
+    }
+
+    .chat-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Стили для нового Instagram-подобного чата */
+    .chat-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+    }
+
+    .chat-modal.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chat-modal-content {
+      background: white;
+      border-radius: 16px;
+      width: 95%;
+      max-width: 800px;
+      height: 90%;
+      max-height: 800px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .chat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 25px;
+      border-bottom: 1px solid #e9ecef;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 16px 16px 0 0;
+    }
+
+    .chat-header h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .chat-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background 0.2s;
+    }
+
+    .chat-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .chat-body {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .chat-list {
+      width: 300px;
+      border-right: 1px solid #e0e0e0;
+      overflow-y: auto;
+    }
+
+    .chat-item {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid #f0f0f0;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .chat-item:hover {
+      background-color: #f8f9fa;
+    }
+
+    .chat-item.active {
+      background-color: #e3f2fd;
+    }
+
+    .chat-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #667eea;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      margin-right: 12px;
+    }
+
+    .chat-info {
+      flex: 1;
+    }
+
+    .chat-name {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+            .chat-last-message {
+            color: #666;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-product-info {
+            margin-top: 4px;
+        }
+
+        .chat-product-info small {
+            color: #667eea;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+    .chat-messages {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-messages-header {
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+      border-bottom: 1px solid #e0e0e0;
+      background: #f8f9fa;
+    }
+
+    .back-to-chats {
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      color: #666;
+      margin-right: 15px;
+    }
+
+    .messages-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message.sent {
+      align-items: flex-end;
+    }
+
+    .message.received {
+      align-items: flex-start;
+    }
+
+    .message-content {
+      max-width: 70%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      word-wrap: break-word;
+    }
+
+    .message.sent .message-content {
+      background: #667eea;
+      color: white;
+    }
+
+    .message.received .message-content {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .message-image {
+      max-width: 200px;
+      max-height: 200px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .message-time {
+      font-size: 12px;
+      color: #999;
+      margin-top: 4px;
+    }
+
+    .message-input-container {
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+      border-top: 1px solid #e0e0e0;
+      background: white;
+    }
+
+    .attach-file-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      margin-right: 10px;
+    }
+
+    .attach-file-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    #message-input {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      padding: 10px 15px;
+      margin-right: 10px;
+      outline: none;
+    }
+
+    #send-message-btn {
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    #send-message-btn:hover {
+      background: #5a6fd8;
+    }
+
+    .no-chats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #666;
+      font-style: italic;
+    }
+  </style>
+  <style>
+    body { background: #f5f6fa; font-family: 'Segoe UI', sans-serif; }
+    .cabinet-container { max-width: 480px; margin: 20px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 16px #0001; padding: 36px 32px; text-align: center; position: relative; }
+    .cabinet-container h2 { margin-bottom: 18px; }
+    .cabinet-container .user-info { margin-bottom: 28px; color: #555; font-size: 1.1rem; }
+    .cabinet-container button { width: 100%; padding: 14px; margin-bottom: 16px; background: #4078c0; color: #fff; border: none; border-radius: 6px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.2s; position: relative; }
+    .cabinet-container button:last-child { background: #e74c3c; margin-bottom: 0; }
+    .cabinet-container button:hover { transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .btn-primary { background: #4078c0; }
+    .btn-danger { background: #e74c3c; }
+    .btn-secondary { background: #6c757d; }
+    
+    /* Стили для модального окна с турнирами */
+    #tournaments-modal {
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      opacity: 0;
+      visibility: hidden;
+      display: flex;
+    }
+    
+    #tournaments-modal:not(.hidden) {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    #tournaments-modal > div {
+      transform: scale(0.95);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0;
+      transform-origin: center;
+    }
+    
+    #tournaments-modal:not(.hidden) > div {
+      transform: scale(1);
+      opacity: 1;
+    }
+    
+    /* Анимации */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideIn {
+      from { 
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to { 
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .tournament-item {
+      padding: 10px 16px;
+      text-align: left;
+      color: #2d3748;
+      transition: background-color 0.2s;
+      border-bottom: 1px solid #edf2f7;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    .tournament-item:last-child {
+      border-bottom: none;
+    }
+    .tournament-item:hover {
+      background-color: #f7fafc;
+    }
+    .tournament-item img {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      object-fit: cover;
+      margin-right: 12px;
+    }
+    .tournament-info {
+      flex: 1;
+      overflow: hidden;
+    }
+    .tournament-title {
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 2px;
+    }
+    .tournament-date {
+      font-size: 0.8rem;
+      color: #718096;
+    }
+    .no-tournaments {
+      padding: 16px;
+      color: #718096;
+      font-style: italic;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- Навигационная панель -->
+  <header class="navbar-container">
+                <div class="navbar-brand">
+                <div class="navbar-logo">
+                    <img src="files/images/impacture.png" alt="Impacture Logo" class="navbar-logo-img">
+                </div>
+                <h2 class="navbar-title">Impacture</h2>
+            </div>
+    <div class="navbar-links">
+      <a href="index.html" class="navbar-link">Главная</a>
+      <a href="student-page.html" class="navbar-link">Команды</a>
+      <a href="tournaments-page.html" class="navbar-link">Турниры</a>
+      <a href="marketplace.html" class="navbar-link">Маркетплейс</a>
+    </div>
+    <div class="navbar-spacer"></div>
+                <div class="navbar-right">
+                <div id="auth-buttons" class="auth-buttons">
+                    <!-- Кнопки будут добавлены через JS -->
+                </div>
+                <button id="chat-btn" class="chat-btn" title="Сообщения">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                      <div class="mobile-nav">
+                    <button class="mobile-close-btn">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 6L6 18M6 6l12 12" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <ul>
+                        <li><a href="index.html">Главная</a></li>
+                        <li><a href="student-page.html">Команды</a></li>
+                        <li><a href="tournaments-page.html">Турниры</a></li>
+                        <li><a href="marketplace.html">Маркетплейс</a></li>
+                    </ul>
+                    <!-- Кнопки входа/регистрации добавляются через JS -->
+                </div>
+      <button class="mobile-menu-btn">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 6h18M3 12h18M3 18h18" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="cabinet-container">
+    <h2>Личный кабинет</h2>
+    <div class="user-info" id="user-info">Загрузка...</div>
+    
+    <div class="cabinet-sections">
+      <div class="section">
+        <h3>🎯 Управление турнирами</h3>
+        <button id="create-tournament-btn" class="btn btn-primary">Создать турнир</button>
+        <button id="my-tournaments-btn" class="btn btn-secondary">Мои турниры</button>
+        </div>
+        
+      <div class="section">
+        <h3>📊 История участия</h3>
+        <button id="tournament-history-btn" class="btn btn-info">История турниров</button>
+          </div>
+          
+      <div class="section">
+        <h3>🛒 Маркетплейс</h3>
+        <button id="create-product-btn" class="btn btn-success">Добавить товар</button>
+        <button id="my-products-btn" class="btn btn-info">Мои товары</button>
+          </div>
+          
+      <div class="section">
+        <h3>👥 Управление командами</h3>
+        <button id="create-team-btn" class="btn btn-primary">Создать команду</button>
+        <button id="my-teams-btn" class="btn btn-secondary">Мои команды</button>
+      </div>
+      
+      <div class="section">
+        <h3>📝 Заявки на вступление</h3>
+        <button id="team-applications-btn" class="btn btn-info">Заявки в мои команды</button>
+        <button id="my-applications-btn" class="btn btn-secondary">Мои заявки</button>
+      </div>
+      
+      <div class="section">
+        <h3>⚙️ Другие действия</h3>
+        <button id="logout-btn">Выйти</button>
+      </div>
+        </div>
+      </div>
+
+  <!-- Современное модальное окно создания турнира -->
+  <div id="tournament-modal" class="modern-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>🏆 Создать новый турнир</h5>
+        <button class="modal-close" id="close-tournament-modal">&times;</button>
+    </div>
+      <div class="modal-body">
+        <form id="tournament-form" novalidate>
+          <div class="form-group">
+            <label for="tournament-title" class="form-label">
+              Название турнира <span class="required">*</span>
+            </label>
+            <input type="text" class="form-control" id="tournament-title" required placeholder="Введите название турнира">
+  </div>
+
+          <div class="form-group">
+            <label for="tournament-city" class="form-label">Город</label>
+            <input type="text" class="form-control" id="tournament-city" placeholder="Введите город проведения">
+          </div>
+          
+          <div class="form-group">
+            <label for="tournament-description" class="form-label">Описание</label>
+            <textarea class="form-control" id="tournament-description" rows="3" placeholder="Опишите турнир, правила, призы и т.д."></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="tournament-start-date" class="form-label">
+              Дата начала <span class="required">*</span>
+            </label>
+            <input type="text" class="form-control" id="tournament-start-date" required placeholder="ДД.ММ.ГГГГ">
+            <div class="form-text">Можно выбрать из календаря или ввести: ГГГГ-ММ-ДД или ДД.ММ.ГГГГ</div>
+        </div>
+        
+          <div class="form-group">
+            <label for="tournament-end-date" class="form-label">
+              Дата окончания <span class="required">*</span>
+            </label>
+            <input type="text" class="form-control" id="tournament-end-date" required placeholder="ДД.ММ.ГГГГ">
+            <div class="form-text">Можно выбрать из календаря или ввести: ГГГГ-ММ-ДД или ДД.ММ.ГГГГ</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="tournament-max-participants" class="form-label">Максимум участников</label>
+            <input type="number" class="form-control" id="tournament-max-participants" min="1" placeholder="Оставьте пустым для неограниченного количества">
+            <div class="form-text">Оставьте пустым для неограниченного количества участников</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="tournament-image" class="form-label">Изображение турнира</label>
+            <div class="file-upload-container">
+              <input type="file" class="form-control" id="tournament-image" accept="image/*" style="display: none;">
+              <button type="button" class="btn btn-outline-secondary file-upload-btn" id="upload-btn">
+                <i class="bi bi-cloud-upload"></i> Выбрать изображение
+        </button>
+              <div id="file-info" class="file-info" style="display: none;">
+                <span id="file-name"></span>
+                <button type="button" class="remove-file-btn" id="remove-file">&times;</button>
+              </div>
+            </div>
+            <div class="form-text">Поддерживаются форматы: JPG, PNG, GIF, WebP (макс. 5MB)</div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="cancel-tournament">Отмена</button>
+        <button type="button" class="btn btn-primary" id="submit-tournament">Создать турнир</button>
+      </div>
+    </div>
+      </div>
+      
+  <!-- Модальное окно списка моих турниров -->
+  <div id="my-tournaments-modal" class="tournament-list-modal">
+    <div class="tournament-list-content">
+      <div class="tournament-list-header">
+        <h5>🏆 Мои турниры</h5>
+        <button class="tournament-list-close" id="close-my-tournaments">&times;</button>
+      </div>
+      <div class="tournament-list-body">
+        <div id="my-tournaments-list">
+          <!-- Список турниров будет загружен через JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно истории участия -->
+  <div id="tournament-history-modal" class="tournament-list-modal">
+    <div class="tournament-list-content">
+      <div class="tournament-list-header">
+        <h5>📊 История участия</h5>
+        <button class="tournament-list-close" id="close-history">&times;</button>
+      </div>
+      <div class="tournament-list-body">
+        <div id="tournament-history-list">
+          <!-- История будет загружена через JS -->
+        </div>
+      </div>
+    </div>
+        </div>
+
+  <!-- Модальное окно редактирования турнира -->
+  <div id="edit-tournament-modal" class="modern-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>✏️ Редактировать турнир</h5>
+        <button class="modal-close" id="close-edit-tournament">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="edit-tournament-form" novalidate>
+          <div class="form-group">
+            <label for="edit-tournament-title" class="form-label">
+              Название турнира <span class="required">*</span>
+          </label>
+            <input type="text" class="form-control" id="edit-tournament-title" required placeholder="Введите название турнира">
+        </div>
+
+          <div class="form-group">
+            <label for="edit-tournament-city" class="form-label">Город</label>
+            <input type="text" class="form-control" id="edit-tournament-city" placeholder="Введите город проведения">
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-tournament-description" class="form-label">Описание</label>
+            <textarea class="form-control" id="edit-tournament-description" rows="3" placeholder="Опишите турнир, правила, призы и т.д."></textarea>
+        </div>
+
+          <div class="form-group">
+            <label for="edit-tournament-start-date" class="form-label">
+              Дата начала <span class="required">*</span>
+          </label>
+            <input type="text" class="form-control" id="edit-tournament-start-date" required placeholder="ДД.ММ.ГГГГ">
+            <div class="form-text">Можно выбрать из календаря или ввести: ГГГГ-ММ-ДД или ДД.ММ.ГГГГ</div>
+        </div>
+
+          <div class="form-group">
+            <label for="edit-tournament-end-date" class="form-label">
+              Дата окончания <span class="required">*</span>
+            </label>
+            <input type="text" class="form-control" id="edit-tournament-end-date" required placeholder="ДД.ММ.ГГГГ">
+            <div class="form-text">Можно выбрать из календаря или ввести: ГГГГ-ММ-ДД или ДД.ММ.ГГГГ</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-tournament-max-participants" class="form-label">Максимум участников</label>
+            <input type="number" class="form-control" id="edit-tournament-max-participants" min="1" placeholder="Оставьте пустым для неограниченного количества">
+            <div class="form-text">Оставьте пустым для неограниченного количества участников</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-tournament-status" class="form-label">Статус турнира</label>
+            <select class="form-control" id="edit-tournament-status">
+              <option value="recruiting">Набор участников</option>
+              <option value="full">Собран</option>
+              <option value="ongoing">Идет</option>
+              <option value="completed">Завершен</option>
+            </select>
+            <div class="form-text">Выберите текущий статус турнира</div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Участники турнира</label>
+            <div id="edit-participants-list" class="participants-list">
+              <!-- Список участников будет загружен через JS -->
+            </div>
+            <div class="form-text">Управляйте участниками турнира</div>
+        </div>
+
+          <div class="form-group">
+            <label for="edit-tournament-image" class="form-label">Изображение турнира</label>
+            <div class="file-upload-container">
+              <input type="file" class="form-control" id="edit-tournament-image" accept="image/*" style="display: none;">
+              <button type="button" class="btn btn-outline-secondary file-upload-btn" id="edit-upload-btn">
+                <i class="bi bi-cloud-upload"></i> Выбрать изображение
+              </button>
+              <div id="edit-file-info" class="file-info" style="display: none;">
+                <span id="edit-file-name"></span>
+                <button type="button" class="remove-file-btn" id="edit-remove-file">&times;</button>
+              </div>
+            </div>
+            <div class="form-text">Поддерживаются форматы: JPG, PNG, GIF, WebP (макс. 5MB)</div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="cancel-edit-tournament">Отмена</button>
+        <button type="button" class="btn btn-primary" id="update-tournament">Обновить турнир</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно создания товара -->
+  <div id="product-modal" class="modern-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>🛒 Добавить товар</h5>
+        <button class="modal-close" id="close-product-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="product-form" novalidate>
+          <div class="form-group">
+            <label for="product-title" class="form-label">
+              Название товара <span class="required">*</span>
+            </label>
+            <input type="text" class="form-control" id="product-title" required placeholder="Введите название товара">
+          </div>
+          
+          <div class="form-group">
+            <label for="product-description" class="form-label">Описание</label>
+            <textarea class="form-control" id="product-description" rows="3" placeholder="Опишите товар, его особенности, комплектацию"></textarea>
+        </div>
+
+          <div class="form-group">
+            <label for="product-price" class="form-label">
+              Цена <span class="required">*</span>
+          </label>
+            <input type="number" class="form-control" id="product-price" required min="0" step="0.01" placeholder="Введите цену в тенге">
+        </div>
+
+          <div class="form-group">
+            <label for="product-category" class="form-label">Категория</label>
+            <select class="form-control" id="product-category">
+              <option value="electronics">Электроника</option>
+              <option value="clothing">Одежда</option>
+              <option value="books">Книги</option>
+              <option value="sports">Спорт</option>
+              <option value="other">Другое</option>
+            </select>
+        </div>
+
+          <div class="form-group">
+            <label for="product-condition" class="form-label">Состояние</label>
+            <select class="form-control" id="product-condition">
+              <option value="new">Новое</option>
+              <option value="good">Хорошее</option>
+              <option value="used">Б/у</option>
+          </select>
+        </div>
+
+          <div class="form-group">
+            <label for="product-city" class="form-label">Город</label>
+            <input type="text" class="form-control" id="product-city" placeholder="Введите город">
+          </div>
+          
+          <div class="form-group">
+            <label for="product-images" class="form-label">Фотографии товара</label>
+            <div class="file-upload-container">
+              <input type="file" class="form-control" id="product-images" accept="image/*" multiple style="display: none;">
+              <button type="button" class="btn btn-outline-secondary file-upload-btn" id="product-upload-btn">
+                <i class="bi bi-cloud-upload"></i> Выбрать фотографии
+              </button>
+              <div id="product-file-info" class="file-info" style="display: none;">
+                <span id="product-file-name"></span>
+                <button type="button" class="remove-file-btn" id="product-remove-file">&times;</button>
+              </div>
+            </div>
+            <div class="form-text">Первая фотография будет главной. Можно выбрать несколько фотографий (макс. 10, по 5MB каждая)</div>
+            <div id="product-images-preview" class="images-preview" style="display: none;">
+              <!-- Предварительный просмотр изображений -->
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="cancel-product">Отмена</button>
+        <button type="button" class="btn btn-primary" id="submit-product">Добавить товар</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно редактирования товара -->
+  <div id="edit-product-modal" class="modern-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>✏️ Редактировать товар</h5>
+        <button class="modal-close" id="close-edit-product-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="edit-product-form" novalidate>
+          <div class="form-group">
+            <label for="edit-product-title" class="form-label">
+              Название товара <span class="required">*</span>
+          </label>
+            <input type="text" class="form-control" id="edit-product-title" required placeholder="Введите название товара">
+        </div>
+
+          <div class="form-group">
+            <label for="edit-product-description" class="form-label">Описание</label>
+            <textarea class="form-control" id="edit-product-description" rows="3" placeholder="Опишите товар, его особенности, комплектацию"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-product-price" class="form-label">
+              Цена <span class="required">*</span>
+          </label>
+            <input type="number" class="form-control" id="edit-product-price" required min="0" step="0.01" placeholder="Введите цену в тенге">
+          </div>
+
+          <div class="form-group">
+            <label for="edit-product-category" class="form-label">Категория</label>
+            <select class="form-control" id="edit-product-category">
+              <option value="electronics">Электроника</option>
+              <option value="clothing">Одежда</option>
+              <option value="books">Книги</option>
+              <option value="sports">Спорт</option>
+              <option value="other">Другое</option>
+          </select>
+        </div>
+
+          <div class="form-group">
+            <label for="edit-product-condition" class="form-label">Состояние</label>
+            <select class="form-control" id="edit-product-condition">
+              <option value="new">Новое</option>
+              <option value="good">Хорошее</option>
+              <option value="used">Б/у</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-product-city" class="form-label">Город</label>
+            <input type="text" class="form-control" id="edit-product-city" placeholder="Введите город">
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-product-images" class="form-label">Добавить новые фотографии</label>
+            <div class="file-upload-container">
+              <input type="file" class="form-control" id="edit-product-images" accept="image/*" multiple style="display: none;">
+              <button type="button" class="btn btn-outline-secondary file-upload-btn" id="edit-product-upload-btn">
+                <i class="bi bi-cloud-upload"></i> Добавить фотографии
+          </button>
+              <div id="edit-product-file-info" class="file-info" style="display: none;">
+                <span id="edit-product-file-name"></span>
+                <button type="button" class="remove-file-btn" id="edit-product-remove-file">&times;</button>
+              </div>
+            </div>
+            <div class="form-text">Новые фотографии будут добавлены к существующим</div>
+            <div id="edit-product-images-preview" class="images-preview" style="display: none;">
+              <!-- Предварительный просмотр новых изображений -->
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Текущие фотографии</label>
+            <div id="edit-product-current-images" class="current-images-grid">
+              <!-- Текущие изображения будут загружены через JS -->
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="cancel-edit-product">Отмена</button>
+        <button type="button" class="btn btn-primary" id="update-product">Обновить товар</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно моих товаров -->
+  <div id="my-products-modal" class="tournament-list-modal">
+    <div class="tournament-list-content">
+      <div class="tournament-list-header">
+        <h5>🛒 Мои товары</h5>
+        <button class="tournament-list-close" id="close-my-products">&times;</button>
+      </div>
+      <div class="tournament-list-body">
+        <div id="my-products-list">
+          <!-- Список товаров будет загружен через JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно создания команды -->
+  <div id="team-modal" class="modern-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>👥 Создать новую команду</h5>
+        <button class="modal-close" id="close-team-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="team-form" novalidate>
+          <div class="form-group">
+            <label for="team-name" class="form-label">
+              Название команды <span class="required">*</span>
+          </label>
+            <input type="text" class="form-control" id="team-name" required placeholder="Введите название команды">
+        </div>
+
+          <div class="form-group">
+            <label for="team-city" class="form-label">Город</label>
+            <input type="text" class="form-control" id="team-city" placeholder="Введите город команды">
+          </div>
+          
+          <div class="form-group">
+            <label for="team-description" class="form-label">Описание команды</label>
+            <textarea class="form-control" id="team-description" rows="4" placeholder="Опишите команду, специализацию, цели и миссию"></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="team-logo" class="form-label">Логотип команды</label>
+            <div class="file-upload-container">
+              <input type="file" class="form-control" id="team-logo" accept="image/*" style="display: none;">
+              <button type="button" class="btn btn-outline-secondary file-upload-btn" id="team-logo-upload-btn">
+                <i class="bi bi-cloud-upload"></i> Выбрать логотип
+          </button>
+              <div id="team-logo-file-info" class="file-info" style="display: none;">
+                <span id="team-logo-file-name"></span>
+                <button type="button" class="remove-file-btn" id="team-logo-remove-file">&times;</button>
+              </div>
+            </div>
+            <div class="form-text">Поддерживаются форматы: JPG, PNG, GIF, WebP (макс. 5MB)</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="team-photo" class="form-label">Фото команды</label>
+            <div class="file-upload-container">
+              <input type="file" class="form-control" id="team-photo" accept="image/*" style="display: none;">
+              <button type="button" class="btn btn-outline-secondary file-upload-btn" id="team-photo-upload-btn">
+                <i class="bi bi-cloud-upload"></i> Выбрать фото
+              </button>
+              <div id="team-photo-file-info" class="file-info" style="display: none;">
+                <span id="team-photo-file-name"></span>
+                <button type="button" class="remove-file-btn" id="team-photo-remove-file">&times;</button>
+              </div>
+            </div>
+            <div class="form-text">Поддерживаются форматы: JPG, PNG, GIF, WebP (макс. 5MB)</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="team-status" class="form-label">Статус команды</label>
+            <select class="form-control" id="team-status">
+              <option value="recruiting">Ищем участников</option>
+              <option value="full">Команда собрана</option>
+              <option value="closed">Набор закрыт</option>
+            </select>
+            <div class="form-text">Выберите текущий статус команды</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="team-max-members" class="form-label">Максимальное количество участников</label>
+            <input type="number" class="form-control" id="team-max-members" min="1" max="20" value="6" placeholder="Введите максимальное количество участников">
+            <div class="form-text">Сколько участников может быть в команде</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="team-current-members" class="form-label">Текущее количество участников</label>
+            <input type="number" class="form-control" id="team-current-members" min="1" max="20" value="1" placeholder="Введите текущее количество участников">
+            <div class="form-text">Сколько участников уже в команде (включая вас)</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="team-achievements" class="form-label">Достижения команды</label>
+            <textarea class="form-control" id="team-achievements" rows="3" placeholder="Введите достижения команды (каждое с новой строки)"></textarea>
+            <div class="form-text">Каждое достижение с новой строки. Например: 🥇 1 место на хакатоне</div>
+        </div>
+      </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="cancel-team">Отмена</button>
+        <button type="button" class="btn btn-primary" id="submit-team">Создать команду</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно моих команд -->
+  <div id="my-teams-modal" class="tournament-list-modal">
+    <div class="tournament-list-content">
+      <div class="tournament-list-header">
+        <h5>👥 Мои команды</h5>
+        <button class="tournament-list-close" id="close-my-teams">&times;</button>
+      </div>
+      <div class="tournament-list-body">
+        <div id="my-teams-list">
+          <!-- Список команд будет загружен через JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно редактирования команды -->
+  <div id="edit-team-modal" class="modern-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>✏️ Редактировать команду</h5>
+        <button class="modal-close" id="close-edit-team-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="edit-team-form" novalidate>
+          <div class="form-group">
+            <label for="edit-team-name" class="form-label">
+              Название команды <span class="required">*</span>
+          </label>
+            <input type="text" class="form-control" id="edit-team-name" required placeholder="Введите название команды">
+        </div>
+
+          <div class="form-group">
+            <label for="edit-team-city" class="form-label">Город</label>
+            <input type="text" class="form-control" id="edit-team-city" placeholder="Введите город команды">
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-team-description" class="form-label">Описание команды</label>
+            <textarea class="form-control" id="edit-team-description" rows="4" placeholder="Опишите команду, специализацию, цели и миссию"></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-team-logo" class="form-label">Логотип команды</label>
+            <div id="current-team-logo" style="display: none; margin-bottom: 10px;">
+              <!-- Текущий логотип будет показан здесь -->
+            </div>
+            <div class="file-upload-container">
+              <input type="file" class="form-control" id="edit-team-logo" accept="image/*" style="display: none;">
+              <button type="button" class="btn btn-outline-secondary file-upload-btn" id="edit-team-logo-upload-btn">
+                <i class="bi bi-cloud-upload"></i> Выбрать новый логотип
+          </button>
+              <div id="edit-team-logo-file-info" class="file-info" style="display: none;">
+                <span id="edit-team-logo-file-name"></span>
+                <button type="button" class="remove-file-btn" id="edit-team-logo-remove-file">&times;</button>
+              </div>
+            </div>
+            <div class="form-text">Поддерживаются форматы: JPG, PNG, GIF, WebP (макс. 5MB)</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-team-photo" class="form-label">Фото команды</label>
+            <div id="current-team-photo" style="display: none; margin-bottom: 10px;">
+              <!-- Текущее фото будет показано здесь -->
+            </div>
+            <div class="file-upload-container">
+              <input type="file" class="form-control" id="edit-team-photo" accept="image/*" style="display: none;">
+              <button type="button" class="btn btn-outline-secondary file-upload-btn" id="edit-team-photo-upload-btn">
+                <i class="bi bi-cloud-upload"></i> Выбрать новое фото
+          </button>
+              <div id="edit-team-photo-file-info" class="file-info" style="display: none;">
+                <span id="edit-team-photo-file-name"></span>
+                <button type="button" class="remove-file-btn" id="edit-team-photo-remove-file">&times;</button>
+              </div>
+            </div>
+            <div class="form-text">Поддерживаются форматы: JPG, PNG, GIF, WebP (макс. 5MB)</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-team-status" class="form-label">Статус команды</label>
+            <select class="form-control" id="edit-team-status">
+              <option value="recruiting">Ищем участников</option>
+              <option value="full">Команда собрана</option>
+              <option value="closed">Набор закрыт</option>
+            </select>
+            <div class="form-text">Выберите текущий статус команды</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-team-max-members" class="form-label">Максимальное количество участников</label>
+            <input type="number" class="form-control" id="edit-team-max-members" min="1" max="20" placeholder="Введите максимальное количество участников">
+            <div class="form-text">Сколько участников может быть в команде</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-team-current-members" class="form-label">Текущее количество участников</label>
+            <input type="number" class="form-control" id="edit-team-current-members" min="1" max="20" placeholder="Введите текущее количество участников">
+            <div class="form-text">Сколько участников уже в команде</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-team-achievements" class="form-label">Достижения команды</label>
+            <textarea class="form-control" id="edit-team-achievements" rows="3" placeholder="Введите достижения команды (каждое с новой строки)"></textarea>
+            <div class="form-text">Каждое достижение с новой строки. Например: 🥇 1 место на хакатоне</div>
+        </div>
+      </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="cancel-edit-team">Отмена</button>
+        <button type="button" class="btn btn-primary" id="submit-edit-team">Сохранить изменения</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Модальное окно чата -->
+  <div id="chat-modal" class="chat-modal">
+    <div class="chat-modal-content">
+      <div class="chat-header">
+        <h3>💬 Сообщения</h3>
+        <button class="chat-close" id="close-chat-modal">&times;</button>
+      </div>
+      <div class="chat-body">
+        <div class="chat-list" id="chat-list">
+          <!-- Список чатов будет загружен через JS -->
+        </div>
+        <div class="chat-messages" id="chat-messages" style="display: none;">
+          <div class="chat-messages-header">
+            <button class="back-to-chats" id="back-to-chats">&larr; Назад</button>
+            <span id="current-chat-user"></span>
+          </div>
+          <div class="messages-container" id="messages-container">
+            <!-- Сообщения будут загружены через JS -->
+          </div>
+          <div class="message-input-container">
+            <input type="file" id="chat-file-input" accept="image/*" style="display: none;">
+            <button class="attach-file-btn" id="attach-file-btn">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <input type="text" id="message-input" placeholder="Введите сообщение...">
+            <button id="send-message-btn">Отправить</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно заявок в мои команды -->
+  <div id="team-applications-modal" class="tournament-list-modal">
+    <div class="tournament-list-content">
+      <div class="tournament-list-header">
+        <h5>📝 Заявки в мои команды</h5>
+        <button class="tournament-list-close" id="close-team-applications">&times;</button>
+      </div>
+      <div class="tournament-list-body">
+        <div id="team-applications-list">
+          <!-- Список заявок будет загружен через JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно моих заявок -->
+  <div id="my-applications-modal" class="tournament-list-modal">
+    <div class="tournament-list-content">
+      <div class="tournament-list-header">
+        <h5>📝 Мои заявки</h5>
+        <button class="tournament-list-close" id="close-my-applications">&times;</button>
+      </div>
+      <div class="tournament-list-body">
+        <div id="my-applications-list">
+          <!-- Список заявок будет загружен через JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="files/scripts/site.js"></script>
+  <script src="files/scripts/mobile-nav.js"></script>
+  <script src="files/scripts/cabinet.js"></script>
+  <script src="files/scripts/chat.js"></script>
+</body>
+</html>

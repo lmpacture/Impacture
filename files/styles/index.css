@@ -1,0 +1,307 @@
+/* Общие стили */
+:root {
+    --primary-color: #141414;
+    --text-color: #333;
+    --light-gray: #f2f2f2;
+    --border-color: #e0e0e0;
+}
+
+body {
+    font-family: 'Manrope', 'Noto Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: var(--text-color);
+    background-color: white;
+}
+
+
+
+/* Стили для контента */
+.content-wrapper {
+    width: 100%;
+    padding: 0;
+}
+
+/* Стили для hero секции */
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%),
+        url("../images/impactrure_main_screen.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 600px;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-content {
+    max-width: 800px;
+    padding: 2rem;
+    z-index: 1;
+}
+
+.hero-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.button-primary {
+    background: white;
+    color: #141414;
+}
+
+.button-secondary {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+}
+
+.button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.hero-content {
+    color: white;
+    padding: 2rem;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    line-height: 1.2;
+    letter-spacing: -0.033em;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+/* Стили для кнопок */
+.main-btn {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    margin: 0 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.main-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Стили для секции "О проекте" */
+.about-project {
+    padding: 2rem 0;
+}
+
+.about-project {
+    padding: 4rem 2rem 2rem;
+    text-align: center;
+}
+
+.about-project h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #141414;
+    margin-bottom: 1.5rem;
+}
+
+.about-project p {
+    font-size: 16px;
+    color: #141414;
+    margin: 0;
+    padding: 0 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Стили для секции "Как это работает" */
+.how-it-works {
+    padding: 4rem 2rem 2rem;
+    width: 100%;
+}
+
+.how-it-works h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 3rem;
+}
+
+.steps-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.step {
+    flex: 1;
+    min-width: 250px;
+}
+
+.step-number {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.step-content h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 0.75rem;
+}
+
+.step-content p {
+    color: #666;
+    line-height: 1.5;
+    font-size: 1rem;
+}
+
+/* Стили для футера */
+.footer {
+    padding: 4rem 2rem 2rem;
+    width: 100%;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.footer-links {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-links a {
+    color: #666;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--primary-color);
+}
+
+.social-links {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.social-link svg {
+    width: 24px;
+    height: 24px;
+    fill: #666;
+    transition: fill 0.3s ease;
+}
+
+.social-link:hover svg {
+    fill: var(--primary-color);
+}
+
+.footer-copyright {
+    color: #666;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .steps-wrapper {
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    .step {
+        min-width: 100%;
+    }
+
+    .footer-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+}
+    
+
+    .achievement-icon .line {
+        height: 1.5px;
+    }
+
+
+@media (max-width: 576px) {
+    .layout-content-container {
+        padding: 1rem;
+    }
+
+    .team-info h3 {
+        font-size: 1rem;
+    }
+
+    .team-stats {
+        gap: 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .achievement-item {
+        padding: 1rem 0;
+    }
+
+    .achievement-title {
+        font-size: 0.9rem;
+    }
+
+    .achievement-date {
+        font-size: 0.8rem;
+    }
+}

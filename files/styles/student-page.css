@@ -1,0 +1,185 @@
+/* Стили для страницы инженерных команд */
+
+/* Общие стили */
+body {
+    font-family: 'Manrope', 'Noto Sans', sans-serif;
+    background-color: #ffffff;
+}
+
+/* Стили для навбара */
+header {
+    font-family: 'Manrope', 'Noto Sans', sans-serif;
+}
+
+header a {
+    font-family: 'Manrope', 'Noto Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+header button {
+    font-family: 'Manrope', 'Noto Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+header h2 {
+    font-family: 'Manrope', 'Noto Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* Стили для фильтров */
+.layout-content-container {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Стили для карточек команд */
+.team-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.team-card:hover {
+    transform: translateY(-2px);
+}
+
+/* Стили для пагинации */
+.page-numbers {
+    background: #f2f2f2;
+    color: #141414;
+    padding: 4px 12px;
+    border-radius: 100px;
+}
+
+.page-numbers.active {
+    background: #141414;
+    color: white;
+}
+
+/* Стили для мобильной навигации */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.mobile-menu-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+.mobile-nav {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    z-index: 1000;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.mobile-nav.active {
+    display: block;
+}
+
+.mobile-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mobile-nav li {
+    margin-bottom: 1.5rem;
+}
+
+.mobile-nav a {
+    display: block;
+    padding: 0.75rem 0;
+    color: #141414;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s ease;
+}
+
+.mobile-nav a:hover {
+    background-color: #f5f5f5;
+}
+
+.mobile-nav a.button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: #141414;
+    color: white;
+    border-radius: 0.75rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .mobile-menu-btn {
+        display: block;
+    }
+
+    .layout-content-container {
+        width: 100%;
+    }
+
+    .team-card {
+        width: 100%;
+    }
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+
+
+/* Фильтр */
+.filter-section {
+    padding: 20px;
+    background: #f8f9fa;
+    margin-bottom: 30px;
+    border-radius: 10px;
+}
+
+.filter-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+.filter-box {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.filter-select {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    width: 200px;
+    background-color: white;
+}

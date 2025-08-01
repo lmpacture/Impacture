@@ -1,0 +1,9 @@
+[
+  {
+    "id": 1,
+    "name": "Тестовый товар",
+    "description": "Описание товара: лучший товар для теста.",
+    "price": 1000,
+    "image": "files/images/fantast_6/лого.webp"
+  }
+]
