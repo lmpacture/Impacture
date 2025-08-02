@@ -1,4 +1,12 @@
 {
+  "name": "impacture",
+  "version": "1.0.0",
+  "description": "Impacture - платформа для турниров и команд",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js"
+  },
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
@@ -8,5 +16,8 @@
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
     "nodemailer": "^7.0.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

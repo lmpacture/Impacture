@@ -46,6 +46,10 @@ JWT_SECRET=M503R8yrfrv4DbKlfeC9BA0gQlI6ctcR
 
 ### 3. Запуск сервера
 ```bash
+# Локально
+npm start
+
+# Или напрямую
 cd backend
 node server.js
 ```
