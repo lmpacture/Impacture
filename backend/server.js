@@ -11,7 +11,7 @@ const crypto = require('crypto');
 const multer = require('multer');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const USERS_FILE = path.join(__dirname, 'users.json');
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key'; // Берем из .env или используем дефолтный
 const TEAMS_DIR = path.join(__dirname, 'teams'); // Директория для хранения HTML-файлов команд
@@ -3399,8 +3399,8 @@ app.post('/api/teams/regenerate-html', authMiddleware, (req, res) => {
 });
 
 // Запуск сервера
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on http://0.0.0.0:${PORT}`);
   updateTournamentStatuses(); // Обновляем статусы при запуске
 });
 
