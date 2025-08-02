@@ -13,6 +13,28 @@ document.addEventListener('DOMContentLoaded', function() {
   setupEventListeners();
   renderAuthButtons();
   
+  // Добавляем отступ для фильтров на мобильных устройствах
+  function addMobileFilterSpacing() {
+    if (window.innerWidth <= 768) {
+      const searchSection = document.querySelector('.search-section');
+      const filtersPanel = document.getElementById('filters-panel');
+      
+      if (searchSection) {
+        searchSection.style.marginBottom = '25px';
+      }
+      
+      if (filtersPanel) {
+        filtersPanel.style.marginTop = '25px';
+        filtersPanel.style.paddingTop = '15px';
+      }
+    }
+  }
+  
+  addMobileFilterSpacing();
+  
+  // Обновляем отступ при изменении размера окна
+  window.addEventListener('resize', addMobileFilterSpacing);
+  
   // Проверяем параметры URL для автоматического открытия чата
   const urlParams = new URLSearchParams(window.location.search);
   const openChat = urlParams.get('openChat');
@@ -20,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const productId = urlParams.get('productId');
   const productTitle = urlParams.get('productTitle');
   const productPrice = urlParams.get('productPrice');
+  const sellerName = urlParams.get('sellerName');
   
   // Отладочная информация
   console.log('Marketplace URL params:', {
@@ -27,7 +50,8 @@ document.addEventListener('DOMContentLoaded', function() {
     sellerId,
     productId,
     productTitle,
-    productPrice
+    productPrice,
+    sellerName
   });
   
   // Если нужно открыть чат, делаем это после загрузки страницы
@@ -41,28 +65,26 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(async () => {
           console.log('Checking if openChat exists:', typeof window.openChat);
           if (window.openChat) {
-            // Имитируем данные продавца без API
-            try {
-              // Статические данные продавца
-              const seller = {
-                firstName: 'Демо',
-                lastName: 'Продавец'
-              };
-              const sellerName = `${seller.firstName} ${seller.lastName}`;
-              
-              window.openChat(sellerId, sellerName, JSON.stringify({
-                id: productId,
-                title: productTitle,
-                price: productPrice
-              }));
-            } catch (error) {
-              console.error('Error loading seller data:', error);
-              window.openChat(sellerId, 'Продавец', JSON.stringify({
-                id: productId,
-                title: productTitle,
-                price: productPrice
-              }));
+            // Используем переданное имя продавца или получаем данные с сервера
+            let finalSellerName = sellerName || 'Продавец';
+            
+            if (!sellerName) {
+              try {
+                const response = await fetch(`/api/users/${sellerId}`);
+                if (response.ok) {
+                  const seller = await response.json();
+                  finalSellerName = `${seller.firstName} ${seller.lastName}`;
+                }
+              } catch (error) {
+                console.error('Error loading seller data:', error);
+              }
             }
+            
+            window.openChat(sellerId, finalSellerName, JSON.stringify({
+              id: productId,
+              title: productTitle,
+              price: productPrice
+            }));
           }
         }, 100);
       }
@@ -122,14 +144,16 @@ function setupEventListeners() {
 async function loadProducts() {
   try {
     console.log('Loading products...');
-    // Пустой массив товаров
-    allProducts = [];
+    const response = await fetch('/api/products');
+    if (!response.ok) throw new Error('Ошибка загрузки товаров');
+    
+    allProducts = await response.json();
     console.log('Loaded products:', allProducts);
     filteredProducts = [...allProducts];
     renderProducts();
   } catch (error) {
     console.error('Error loading products:', error);
-    document.getElementById('products-grid').innerHTML =
+    document.getElementById('products-grid').innerHTML = 
       '<div class="loading"><p>Ошибка загрузки товаров</p></div>';
   }
 }
@@ -145,7 +169,7 @@ function renderProducts() {
   }
   
   const productsHTML = filteredProducts.map(product => `
-    <div class="product-card" onclick="openProductPage('${product.id}')">
+    <div class="product-card" onclick="openProductPage('${product.id}')" style="cursor: pointer;">
       <img src="${product.images && product.images.length > 0 ? product.images[0] : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjE1MCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM2NjY2NjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ObyBJbWFnZTwvdGV4dD48L3N2Zz4='}" 
            class="product-image" alt="${product.title}">
       <div class="product-info">
@@ -157,6 +181,7 @@ function renderProducts() {
           <span>${product.city || 'Не указан'}</span>
         </div>
       </div>
+
     </div>
   `).join('');
   
@@ -206,6 +231,22 @@ function openProductPage(productId) {
   window.location.href = url;
 }
 
+// Открытие чата с продавцом
+function openChatWithSeller(sellerId, productTitle, productPrice, sellerName) {
+  console.log('Opening chat with seller:', sellerId, productTitle, productPrice, sellerName);
+  
+  // Проверяем, есть ли токен пользователя
+  const token = getToken();
+  if (!token) {
+    alert('Войдите для отправки сообщений продавцу');
+    return;
+  }
+  
+  // Открываем чат через URL параметры
+  const chatUrl = `marketplace.html?openChat=true&sellerId=${sellerId}&productTitle=${encodeURIComponent(productTitle)}&productPrice=${encodeURIComponent(productPrice)}&sellerName=${encodeURIComponent(sellerName || 'Продавец')}`;
+  window.location.href = chatUrl;
+}
+
 // Корзина
 async function loadCart() {
   const token = getToken();
@@ -215,9 +256,16 @@ async function loadCart() {
   }
   
   try {
-    // Имитируем загрузку корзины без API
-    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
-    updateCartBadge(cartItems.length);
+    const response = await fetch('/api/cart', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    
+    if (response.ok) {
+      const cart = await response.json();
+      updateCartBadge(cart.items.length);
+    } else {
+      updateCartBadge(0);
+    }
   } catch (error) {
     console.error('Error loading cart:', error);
     updateCartBadge(0);
@@ -244,27 +292,20 @@ async function addToCart(productId) {
   }
   
   try {
-    // Имитируем добавление в корзину без API
-    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
-    const product = allProducts.find(p => p.id === productId);
+    const response = await fetch('/api/cart', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ productId })
+    });
     
-    if (product) {
-      const existingItem = cartItems.find(item => item.id === productId);
-      if (existingItem) {
-        existingItem.qty += 1;
-      } else {
-        cartItems.push({
-          id: productId,
-          title: product.title,
-          price: product.price,
-          image: product.images[0],
-          qty: 1
-        });
-      }
-      
-      localStorage.setItem('cart', JSON.stringify(cartItems));
+    if (response.ok) {
       loadCart();
       alert('Товар добавлен в корзину!');
+    } else {
+      throw new Error('Ошибка добавления в корзину');
     }
   } catch (error) {
     console.error('Error adding to cart:', error);
@@ -292,9 +333,14 @@ async function loadCartItems() {
   if (!token) return;
   
   try {
-    // Имитируем загрузку товаров корзины без API
-    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
-    renderCartItems(cartItems);
+    const response = await fetch('/api/cart', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    
+    if (response.ok) {
+      const cart = await response.json();
+      renderCartItems(cart.items);
+    }
   } catch (error) {
     console.error('Error loading cart items:', error);
   }
@@ -317,7 +363,7 @@ function renderCartItems(items) {
              class="cart-item-image" alt="${item.title}">
         <div class="cart-item-info">
           <div class="cart-item-title">${item.title}</div>
-          <div class="cart-item-price">${item.price}₽</div>
+          <div class="cart-item-price">${item.price}₸</div>
         </div>
         <div class="cart-item-qty">
           <button class="qty-btn" onclick="updateCartItemQty('${item.id}', ${item.qty - 1})">-</button>
@@ -330,7 +376,7 @@ function renderCartItems(items) {
       </div>
     `).join('')}
     <div class="cart-total">
-      <div class="cart-total-price">Итого: ${total}₽</div>
+              <div class="cart-total-price">Итого: ${total}₸</div>
     </div>
   `;
 }
@@ -340,22 +386,16 @@ async function updateCartItemQty(productId, qty) {
   if (!token) return;
   
   try {
-    // Имитируем обновление количества без API
-    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
-    const item = cartItems.find(item => item.id === productId);
+    const response = await fetch(`/api/cart/${productId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ qty })
+    });
     
-    if (item) {
-      if (qty <= 0) {
-        // Удаляем товар если количество 0 или меньше
-        const index = cartItems.findIndex(item => item.id === productId);
-        if (index > -1) {
-          cartItems.splice(index, 1);
-        }
-      } else {
-        item.qty = qty;
-      }
-      
-      localStorage.setItem('cart', JSON.stringify(cartItems));
+    if (response.ok) {
       loadCartItems();
       loadCart();
     }
@@ -369,13 +409,12 @@ async function removeFromCart(productId) {
   if (!token) return;
   
   try {
-    // Имитируем удаление из корзины без API
-    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
-    const index = cartItems.findIndex(item => item.id === productId);
+    const response = await fetch(`/api/cart/${productId}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
     
-    if (index > -1) {
-      cartItems.splice(index, 1);
-      localStorage.setItem('cart', JSON.stringify(cartItems));
+    if (response.ok) {
       loadCartItems();
       loadCart();
     }
@@ -392,19 +431,18 @@ async function checkout() {
   }
   
   try {
-    // Имитируем оформление покупки без API
-    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+    const response = await fetch('/api/checkout', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
     
-    if (cartItems.length === 0) {
-      alert('Корзина пуста');
-      return;
+    if (response.ok) {
+      alert('Покупка оформлена!');
+      closeCart();
+      loadCart();
+    } else {
+      throw new Error('Ошибка оформления покупки');
     }
-    
-    // Очищаем корзину
-    localStorage.removeItem('cart');
-    alert('Покупка оформлена! Спасибо за заказ!');
-    closeCart();
-    loadCart();
   } catch (error) {
     console.error('Error checkout:', error);
     alert('Ошибка оформления покупки');

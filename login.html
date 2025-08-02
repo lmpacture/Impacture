@@ -15,6 +15,8 @@
     .login-container button:hover { background: #305a8d; }
     .login-container .link { display: block; text-align: center; margin-top: 12px; color: #4078c0; text-decoration: none; }
     .login-container .link:hover { text-decoration: underline; }
+    .login-container .link:first-of-type { margin-top: 16px; }
+    .login-container .link:last-of-type { margin-top: 8px; }
   </style>
 </head>
 <body>
@@ -27,8 +29,59 @@
       <input type="password" id="password" name="password" required autocomplete="current-password">
       <button type="submit">Войти</button>
     </form>
+    <a class="link" href="reset-password.html">Забыли пароль?</a>
     <a class="link" href="register.html">Нет аккаунта? Зарегистрироваться</a>
   </div>
   <script src="files/scripts/site.js"></script>
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      if (!email || !password) {
+        alert('Пожалуйста, заполните все поля');
+        return;
+      }
+      
+      try {
+        const response = await fetch('http://localhost:3000/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email,
+            password
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          // Сохраняем токен и данные пользователя
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('user', JSON.stringify({
+            firstName: data.firstName,
+            lastName: data.lastName
+          }));
+          
+          // Перенаправляем на главную страницу
+          window.location.href = 'index.html';
+        } else {
+          if (response.status === 403) {
+            // Email не подтвержден
+            alert('Ваш email не подтвержден. Пожалуйста, проверьте вашу почту и подтвердите email перед входом.');
+          } else {
+            alert(data.message || 'Ошибка при входе');
+          }
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Ошибка при входе. Попробуйте еще раз.');
+      }
+    });
+  </script>
 </body>
 </html> 

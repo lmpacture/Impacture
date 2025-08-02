@@ -1,0 +1,72 @@
+[
+  {
+    "id": "1754058044521",
+    "email": "test@test.com",
+    "password": "$2b$10$uSkn1O1CJBvNdsja3FkXkOHQKP6EsgcQj9dq.hIXSoltVIJmf3QHi",
+    "firstName": "Test",
+    "lastName": "User",
+    "isEmailConfirmed": false,
+    "emailToken": "6972e35d3d5862cff01da700a3662c11468b3675147f30a6e8f0913ee25f62b5"
+  },
+  {
+    "id": "1754058581400",
+    "email": "newuser@test.com",
+    "password": "$2b$10$DHQlbH8W8zJVR8dD/3/6Ae/0kd48ASGFta2edENbh7qfMkBkV3c.W",
+    "firstName": "New",
+    "lastName": "User",
+    "isEmailConfirmed": true,
+    "resetToken": "2c9a1fbd4e2b709533610b941afbcc46d3f3664e1e8169184ea0a0f1ee3ec07c",
+    "resetTokenExp": 1754062303401
+  },
+  {
+    "id": "1754058759622",
+    "email": "testuser@example.com",
+    "password": "$2b$10$vyAZFkFTuolSxLS.NzVlzO5.eFDX5BLrDBW6.tIul6LLJe8xdusAm",
+    "firstName": "Test",
+    "lastName": "User",
+    "isEmailConfirmed": true
+  },
+  {
+    "id": "1754058765083",
+    "email": "anotheruser@example.com",
+    "password": "$2b$10$ArQ6pNUuKvlpKI.9d3NKR.UCT9Fg3j2gJ7umZmnmC3EPfLGHNwIXG",
+    "firstName": "Another",
+    "lastName": "User",
+    "isEmailConfirmed": true
+  },
+  {
+    "id": "1754085458469",
+    "email": "test@example.com",
+    "password": "$2b$10$x/Q1MyFbA9B/YCB2Y.mS5O8hbC1/NK01gB79QhVq8X9axqXtneJZ.",
+    "firstName": "Test",
+    "lastName": "User",
+    "isEmailConfirmed": true
+  },
+  {
+    "id": "1754085885976",
+    "email": "seikenov63@gmail.com",
+    "password": "$2b$10$8DZ0oREGARjCnCh13kMLi.dwLgHrhF.tEZu3Vq5yl29fxgEVvsq0q",
+    "firstName": "Али",
+    "lastName": "Сейкенов",
+    "isEmailConfirmed": true
+  },
+  {
+    "id": "1754086000976",
+    "email": "aseikenov@gmail.com",
+    "password": "$2b$10$t19DzUWgBDf8nuWaBMHrTuO7aKUvuIx660nRg8vwqu8NlSxAgo7Oy",
+    "firstName": "Ali",
+    "lastName": "Seikenov",
+    "isEmailConfirmed": true,
+    "resetToken": "88bd816c7dd8ec2fc9471ebade86c542e04763a17feac68071e4b9a0b8eb05f7",
+    "resetTokenExp": 1754091596604
+  },
+  {
+    "id": "1754127911333",
+    "email": "hosting@test.com",
+    "password": "$2b$10$atT5fllgd4sZZwe6LOHia.B7x9r3wZOVet9TSmSQiqan/KuUh3Er.",
+    "firstName": "Хостинг",
+    "lastName": "Тест",
+    "isEmailConfirmed": false,
+    "emailToken": "92b7c015107d4affd677126687f8fa85f63a9a27b2906f194375b16acb38b817"
+  }
+]

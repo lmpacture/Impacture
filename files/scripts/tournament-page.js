@@ -24,10 +24,37 @@ async function registerForTournament() {
     return;
   }
   
+  // Сначала проверяем, зарегистрирован ли пользователь уже
   try {
-    // Имитируем регистрацию без API
-    alert('Успешная регистрация на турнир!');
-    updateTournamentData(); // Обновляем данные
+    const checkResponse = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}`);
+    if (!checkResponse.ok) throw new Error('Не удалось получить данные турнира');
+    
+    const tournament = await checkResponse.json();
+    const currentUserId = JSON.parse(atob(token.split('.')[1])).id;
+    
+    // Проверяем, зарегистрирован ли пользователь уже
+    if (tournament.participants && tournament.participants.includes(currentUserId)) {
+      alert('Вы уже зарегистрированы на этот турнир!');
+      updateTournamentData(); // Обновляем данные для правильного отображения кнопки
+      return;
+    }
+    
+    // Если не зарегистрирован, регистрируем
+    const response = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}/register`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok) {
+      alert('Успешная регистрация на турнир!');
+      updateTournamentData(); // Обновляем данные
+    } else {
+      alert(data.error || 'Ошибка регистрации на турнир');
+    }
   } catch (error) {
     console.error('Error registering for tournament:', error);
     alert('Ошибка регистрации на турнир');
@@ -47,16 +74,13 @@ async function updateTournamentData() {
   if (!tournamentId) return;
   
   try {
-    // Статические данные турнира
-    const tournament = {
-      id: tournamentId,
-      participants: [1, 2, 3, 4, 5],
-      maxParticipants: 30,
-      status: 'recruiting'
-    };
+    const response = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}`);
+    if (!response.ok) throw new Error('Не удалось загрузить данные турнира');
+    
+    const tournament = await response.json();
     
     // Обновляем количество участников
-    const participantsElement = document.querySelector('.bi-people')?.parentElement?.querySelector('span');
+    const participantsElement = document.querySelector('.bi-people').parentElement.querySelector('span');
     if (participantsElement) {
       const maxParticipants = tournament.maxParticipants || '∞';
       participantsElement.textContent = `${tournament.participants ? tournament.participants.length : 0} / ${maxParticipants} участников`;
@@ -79,23 +103,46 @@ async function updateTournamentData() {
     const registerBtn = document.getElementById('registerBtn');
     if (registerBtn) {
       const isFull = tournament.maxParticipants && tournament.participants && tournament.participants.length >= tournament.maxParticipants;
+      const token = localStorage.getItem('token');
+      let currentUserId = null;
+      
+      if (token) {
+        try {
+          currentUserId = JSON.parse(atob(token.split('.')[1])).id;
+        } catch (e) {
+          console.error('Error parsing token:', e);
+        }
+      }
+      
+      const isRegistered = currentUserId && tournament.participants && tournament.participants.includes(currentUserId);
       
       if (tournament.status === 'recruiting' && !isFull) {
-        registerBtn.textContent = 'Участвовать';
-        registerBtn.disabled = false;
-        registerBtn.className = 'px-6 py-3 bg-white text-blue-600 font-medium rounded-lg hover:bg-opacity-90';
+        if (isRegistered) {
+          registerBtn.textContent = 'Вы зарегистрированы';
+          registerBtn.disabled = false;
+          registerBtn.className = 'participate-btn';
+          registerBtn.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+        } else {
+          registerBtn.textContent = 'Участвовать';
+          registerBtn.disabled = false;
+          registerBtn.className = 'participate-btn';
+          registerBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        }
       } else if (tournament.status === 'recruiting' && isFull) {
         registerBtn.textContent = 'Мест нет';
         registerBtn.disabled = true;
-        registerBtn.className = 'px-6 py-3 bg-gray-300 text-gray-600 font-medium rounded-lg cursor-not-allowed';
+        registerBtn.className = 'participate-btn';
+        registerBtn.style.background = '#6c757d';
       } else if (tournament.status === 'ongoing') {
         registerBtn.textContent = 'Турнир идет';
         registerBtn.disabled = true;
-        registerBtn.className = 'px-6 py-3 bg-green-500 text-white font-medium rounded-lg cursor-not-allowed';
+        registerBtn.className = 'participate-btn';
+        registerBtn.style.background = '#007bff';
       } else {
         registerBtn.textContent = 'Завершен';
         registerBtn.disabled = true;
-        registerBtn.className = 'px-6 py-3 bg-gray-500 text-white font-medium rounded-lg cursor-not-allowed';
+        registerBtn.className = 'participate-btn';
+        registerBtn.style.background = '#6c757d';
       }
     }
     

@@ -28,144 +28,22 @@ document.addEventListener('DOMContentLoaded', function() {
     setupPaginationHandlers();
 });
 
-// Загрузка команд
+// Загрузка команд из API
 async function loadTeams() {
-  const container = document.getElementById('teams-container');
-  
-  // Проверяем, что контейнер найден
-  if (!container) {
-    console.error('Контейнер teams-container не найден');
-    return;
-  }
-  
-  try {
-    // Пустой массив команд
-    const teams = [];
-    
-    if (teams.length === 0) {
-      container.innerHTML = `
-        <div class="text-center py-5">
-          <div class="mb-4">
-            <i class="bi bi-people" style="font-size: 3rem; color: #6b7280;"></i>
-          </div>
-          <h3 class="text-gray-600 mb-2">Команд пока нет</h3>
-          <p class="text-gray-500">Будьте первым, кто создаст команду!</p>
-        </div>
-      `;
-      return;
+    try {
+        const response = await fetch('http://localhost:3000/api/teams');
+        
+        if (response.ok) {
+            allTeams = await response.json();
+            console.log('Загружено команд:', allTeams.length);
+            displayTeamsForPage(1);
+            updatePagination();
+        } else {
+            console.error('Ошибка загрузки команд');
+        }
+    } catch (error) {
+        console.error('Error loading teams:', error);
     }
-    
-    container.innerHTML = teams.map(team => createTeamCard(team)).join('');
-    
-    // Добавляем обработчики для кнопок
-    teams.forEach(team => {
-      const joinBtn = document.getElementById(`join-${team.id}`);
-      if (joinBtn) {
-        joinBtn.addEventListener('click', () => joinTeam(team.id));
-      }
-    });
-    
-  } catch (error) {
-    console.error('Error loading teams:', error);
-    if (container) {
-      container.innerHTML = `
-        <div class="text-center py-5">
-          <div class="mb-4">
-            <i class="bi bi-exclamation-triangle" style="font-size: 3rem; color: #ef4444;"></i>
-          </div>
-          <h3 class="text-gray-600 mb-2">Ошибка загрузки команд</h3>
-          <p class="text-gray-500">Попробуйте обновить страницу</p>
-        </div>
-      `;
-    }
-  }
-}
-
-// Создание карточки команды
-function createTeamCard(team) {
-  const statusText = {
-    'recruiting': 'Набор участников',
-    'full': 'Команда собрана',
-    'active': 'Активна'
-  };
-  
-  const membersCount = team.members ? team.members.length : 0;
-  const isFull = team.maxMembers && membersCount >= team.maxMembers;
-  
-  return `
-    <div class="team-card">
-      <div class="row">
-        <div class="col-md-4">
-          <img src="${team.image || 'files/images/impacture.png'}" 
-               alt="${team.name}" 
-               class="team-image">
-        </div>
-        <div class="col-md-8">
-          <div class="d-flex justify-content-between align-items-start mb-3">
-            <h3 class="mb-0">${team.name}</h3>
-            <span class="status-badge status-${team.status}">${statusText[team.status]}</span>
-          </div>
-          
-          <p class="text-muted mb-3">${team.description || 'Описание команды будет добавлено позже.'}</p>
-          
-          <div class="row mb-3">
-            <div class="col-sm-6">
-              <small class="text-muted">
-                <i class="bi bi-geo-alt me-1"></i>
-                ${team.city || 'Город не указан'}
-              </small>
-            </div>
-            <div class="col-sm-6">
-              <small class="text-muted">
-                <i class="bi bi-people me-1"></i>
-                ${membersCount} / ${team.maxMembers || '∞'} участников
-              </small>
-            </div>
-          </div>
-          
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="text-muted">
-              <small>Участники: ${team.members ? team.members.join(', ') : 'Нет участников'}</small>
-            </div>
-            
-            <div class="d-flex gap-2">
-              <a href="teams/${team.name.replace(/\s+/g, '_')}-team.html" class="btn btn-outline-primary btn-sm">
-                Подробнее
-              </a>
-              
-              ${team.status === 'recruiting' && !isFull ? 
-                `<button id="join-${team.id}" class="btn btn-primary btn-sm">
-                  Присоединиться
-                </button>` : 
-                team.status === 'recruiting' && isFull ?
-                `<span class="btn btn-secondary btn-sm disabled">Мест нет</span>` :
-                `<span class="btn btn-secondary btn-sm disabled">Команда собрана</span>`
-              }
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-// Присоединение к команде
-async function joinTeam(teamId) {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    alert('Для присоединения к команде необходимо войти в аккаунт');
-    window.location.href = 'login.html';
-    return;
-  }
-
-  try {
-    // Показываем сообщение об успешном присоединении
-    alert('Успешное присоединение к команде!');
-    loadTeams(); // Перезагружаем список
-  } catch (error) {
-    console.error('Error joining team:', error);
-    alert('Ошибка присоединения к команде');
-  }
 }
 
 // Отображение команд для конкретной страницы

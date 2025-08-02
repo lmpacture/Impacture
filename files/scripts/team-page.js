@@ -71,19 +71,19 @@ class TeamPage {
         if (this.team.logo) {
             teamLogo.src = this.team.logo;
             teamLogo.onerror = () => {
-                teamLogo.src = 'files/images/impacture.png';
+                teamLogo.src = 'files/images/impactrure_main_screen.png';
             };
         } else {
-            teamLogo.src = 'files/images/impacture.png';
+            teamLogo.src = 'files/images/impactrure_main_screen.png';
         }
 
         if (this.team.photo) {
             teamPhoto.src = this.team.photo;
             teamPhoto.onerror = () => {
-                teamPhoto.src = 'files/images/impacture.png';
+                teamPhoto.src = 'files/images/impactrure_main_screen.png';
             };
         } else {
-            teamPhoto.src = 'files/images/impacture.png';
+            teamPhoto.src = 'files/images/impactrure_main_screen.png';
         }
 
         // Рендерим достижения

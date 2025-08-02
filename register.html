@@ -34,5 +34,70 @@
     <a class="link" href="login.html">Уже есть аккаунт? Войти</a>
   </div>
   <script src="files/scripts/site.js"></script>
+  <script>
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      
+      if (!email || !password || !firstName || !lastName) {
+        alert('Пожалуйста, заполните все поля');
+        return;
+      }
+      
+      if (password.length < 6) {
+        alert('Пароль должен содержать минимум 6 символов');
+        return;
+      }
+      
+      try {
+        const response = await fetch('http://localhost:3000/api/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email,
+            password,
+            firstName,
+            lastName
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          // Показываем сообщение об успешной регистрации
+          const form = document.getElementById('register-form');
+          
+          form.innerHTML = `
+            <div style="text-align: center; padding: 20px;">
+              <h3 style="color: #4CAF50; margin-bottom: 15px;">✅ Регистрация успешна!</h3>
+              <p style="color: #666; line-height: 1.6;">
+                Мы отправили письмо с подтверждением на ваш email: <strong>${email}</strong>
+              </p>
+              <p style="color: #666; margin-top: 15px;">
+                Пожалуйста, проверьте вашу почту и нажмите на ссылку для подтверждения.
+              </p>
+              <p style="color: #999; font-size: 14px; margin-top: 20px;">
+                После подтверждения email вы сможете войти в свой аккаунт.
+              </p>
+              <a href="login.html" style="display: inline-block; margin-top: 20px; color: #4078c0; text-decoration: none;">
+                ← Вернуться к входу
+              </a>
+            </div>
+          `;
+        } else {
+          alert(data.message || 'Ошибка при регистрации');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Ошибка при регистрации. Попробуйте еще раз.');
+      }
+    });
+  </script>
 </body>
 </html> 

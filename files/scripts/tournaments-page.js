@@ -8,8 +8,10 @@ async function loadTournaments() {
   const container = document.getElementById('tournaments-container');
   
   try {
-    // Пустой массив турниров
-    const tournaments = [];
+    const response = await fetch('http://localhost:3000/api/tournaments');
+    if (!response.ok) throw new Error('Не удалось загрузить турниры');
+    
+    const tournaments = await response.json();
     
     if (tournaments.length === 0) {
       container.innerHTML = `
@@ -24,9 +26,15 @@ async function loadTournaments() {
       return;
     }
     
+    // Сортируем турниры: сначала идущие, потом набор, потом завершенные
+    tournaments.sort((a, b) => {
+      const statusOrder = { 'ongoing': 0, 'recruiting': 1, 'full': 2, 'completed': 3 };
+      return statusOrder[a.status] - statusOrder[b.status];
+    });
+    
     container.innerHTML = tournaments.map(tournament => createTournamentCard(tournament)).join('');
     
-    // Добавляем обработчики для кнопок
+    // Добавляем обработчики для кнопок регистрации
     tournaments.forEach(tournament => {
       const registerBtn = document.getElementById(`register-${tournament.id}`);
       if (registerBtn) {
@@ -37,12 +45,13 @@ async function loadTournaments() {
   } catch (error) {
     console.error('Error loading tournaments:', error);
     container.innerHTML = `
-      <div class="text-center py-5">
+      <div class="error">
         <div class="mb-4">
           <i class="bi bi-exclamation-triangle" style="font-size: 3rem; color: #ef4444;"></i>
         </div>
-        <h3 class="text-gray-600 mb-2">Ошибка загрузки турниров</h3>
-        <p class="text-gray-500">Попробуйте обновить страницу</p>
+        <h3 class="text-red-600 mb-2">Ошибка загрузки</h3>
+        <p class="text-red-500">Не удалось загрузить турниры. Попробуйте обновить страницу.</p>
+        <button class="btn btn-primary mt-3" onclick="loadTournaments()">Попробовать снова</button>
       </div>
     `;
   }
@@ -60,6 +69,8 @@ function createTournamentCard(tournament) {
   const participantsCount = tournament.participants ? tournament.participants.length : 0;
   const maxParticipants = tournament.maxParticipants || '∞';
   const isFull = tournament.maxParticipants && participantsCount >= tournament.maxParticipants;
+  
+
   
   return `
     <div class="tournament-card">
@@ -127,14 +138,26 @@ async function registerForTournament(tournamentId) {
   if (!token) {
     alert('Для участия в турнире необходимо войти в аккаунт');
     window.location.href = 'login.html';
-    return;
-  }
+                return;
+            }
 
   try {
-    // Показываем сообщение об успешной регистрации
-    alert('Успешная регистрация на турнир!');
-    loadTournaments(); // Перезагружаем список
-  } catch (error) {
+    const response = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}/register`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok) {
+      alert('Успешная регистрация на турнир!');
+      loadTournaments(); // Перезагружаем список
+    } else {
+      alert(data.error || 'Ошибка регистрации на турнир');
+    }
+        } catch (error) {
     console.error('Error registering for tournament:', error);
     alert('Ошибка регистрации на турнир');
   }
