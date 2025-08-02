@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Загрузка команд из API
 async function loadTeams() {
     try {
-        const response = await fetch('http://localhost:3000/api/teams');
+        const response = await fetch('/api/teams');
         
         if (response.ok) {
             allTeams = await response.json();

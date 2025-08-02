@@ -26,7 +26,7 @@ async function registerForTournament() {
   
   // Сначала проверяем, зарегистрирован ли пользователь уже
   try {
-    const checkResponse = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}`);
+    const checkResponse = await fetch(`/api/tournaments/${tournamentId}`);
     if (!checkResponse.ok) throw new Error('Не удалось получить данные турнира');
     
     const tournament = await checkResponse.json();
@@ -40,7 +40,7 @@ async function registerForTournament() {
     }
     
     // Если не зарегистрирован, регистрируем
-    const response = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}/register`, {
+    const response = await fetch(`/api/tournaments/${tournamentId}/register`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -74,7 +74,7 @@ async function updateTournamentData() {
   if (!tournamentId) return;
   
   try {
-    const response = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}`);
+    const response = await fetch(`/api/tournaments/${tournamentId}`);
     if (!response.ok) throw new Error('Не удалось загрузить данные турнира');
     
     const tournament = await response.json();

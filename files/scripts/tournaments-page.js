@@ -8,7 +8,7 @@ async function loadTournaments() {
   const container = document.getElementById('tournaments-container');
   
   try {
-    const response = await fetch('http://localhost:3000/api/tournaments');
+            const response = await fetch('/api/tournaments');
     if (!response.ok) throw new Error('Не удалось загрузить турниры');
     
     const tournaments = await response.json();
@@ -142,7 +142,7 @@ async function registerForTournament(tournamentId) {
             }
 
   try {
-    const response = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}/register`, {
+            const response = await fetch(`/api/tournaments/${tournamentId}/register`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`

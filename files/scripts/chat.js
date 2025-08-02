@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadCurrentUser() {
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:3000/api/profile', {
+        const response = await fetch('/api/profile', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -385,7 +385,7 @@ async function sendMessage() {
             requestBody.productId = currentChatUser.productInfo.id;
         }
         
-        const response = await fetch('http://localhost:3000/api/chats/send', {
+        const response = await fetch('/api/chats/send', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -417,7 +417,7 @@ async function handleFileUpload(event) {
         formData.append('image', file);
         formData.append('receiverId', currentChatUser.id);
 
-        const response = await fetch('http://localhost:3000/api/chats/send-image', {
+        const response = await fetch('/api/chats/send-image', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`

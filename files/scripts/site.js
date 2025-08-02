@@ -293,7 +293,7 @@ if (window.location.pathname.endsWith('cabinet.html')) {
             formData.append('photo', photoFile);
           }
 
-          const response = await fetch('http://localhost:3000/api/teams', {
+          const response = await fetch('/api/teams', {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${token}`
@@ -471,7 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Сброс пароля: отправка запроса на e-mail
 async function requestPasswordReset(email) {
-  const res = await fetch('http://localhost:3000/api/request-password-reset', {
+          const res = await fetch('/api/request-password-reset', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email })

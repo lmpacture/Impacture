@@ -190,7 +190,7 @@ function setupModalHandlers() {
 async function loadMyTournaments() {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch('http://localhost:3000/api/tournaments/user/created', {
+            const response = await fetch('/api/tournaments/user/created', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -257,7 +257,7 @@ function displayMyTournaments(tournaments) {
 async function loadTournamentHistory() {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch('http://localhost:3000/api/tournaments/user/participating', {
+            const response = await fetch('/api/tournaments/user/participating', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -356,7 +356,7 @@ function viewTournament(tournamentId) {
 async function editTournament(tournamentId) {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}/edit`, {
+    const response = await fetch(`/api/tournaments/${tournamentId}/edit`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -478,7 +478,7 @@ async function updateTournament() {
       formData.append('image', imageFile);
     }
 
-    const response = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}`, {
+            const response = await fetch(`/api/tournaments/${tournamentId}`, {
       method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -567,7 +567,7 @@ async function loadParticipantsList(tournament) {
 
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3000/api/users`, {
+            const response = await fetch(`/api/users`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -668,7 +668,7 @@ async function removeParticipant(tournamentId, userId) {
 async function getTournament(tournamentId) {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3000/api/tournaments/${tournamentId}/edit`, {
+    const response = await fetch(`/api/tournaments/${tournamentId}/edit`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -825,7 +825,7 @@ function closeTournamentModal() {
 async function loadUserInfo() {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch('http://localhost:3000/api/profile', {
+            const response = await fetch('/api/profile', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -937,7 +937,7 @@ async function createTournament() {
     }
 
     console.log('Отправка на сервер...');
-                const response = await fetch('http://localhost:3000/api/tournaments', {
+                const response = await fetch('/api/tournaments', {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -1181,7 +1181,7 @@ async function createProduct() {
       formData.append('images', imageFiles[i]);
     }
 
-    const response = await fetch('http://localhost:3000/api/products', {
+            const response = await fetch('/api/products', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -1226,7 +1226,7 @@ function closeMyProductsModal() {
 async function loadMyProducts() {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch('http://localhost:3000/api/products/user/created', {
+            const response = await fetch('/api/products/user/created', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -1322,7 +1322,7 @@ let selectedEditProductFiles = [];
 async function editProduct(productId) {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3000/api/products/${productId}`, {
+            const response = await fetch(`/api/products/${productId}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -1379,7 +1379,7 @@ async function removeCurrentProductImage(imagePath, index) {
   
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3000/api/products/${editingProduct.id}/images/${index}`, {
+            const response = await fetch(`/api/products/${editingProduct.id}/images/${index}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -1460,7 +1460,7 @@ async function updateProduct() {
       formData.append('images', newImageFiles[i]);
     }
 
-    const response = await fetch(`http://localhost:3000/api/products/${editingProduct.id}`, {
+            const response = await fetch(`/api/products/${editingProduct.id}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -2024,7 +2024,7 @@ async function createTeam() {
       formData.append('photo', photoFile);
     }
 
-    const response = await fetch('http://localhost:3000/api/teams', {
+            const response = await fetch('/api/teams', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -2061,7 +2061,7 @@ async function createTeam() {
 async function loadMyTeams() {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch('http://localhost:3000/api/teams/user/created', {
+            const response = await fetch('/api/teams/user/created', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -2419,7 +2419,7 @@ async function updateTeam() {
 
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3000/api/teams/${teamId}`, {
+            const response = await fetch(`/api/teams/${teamId}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -2488,7 +2488,7 @@ async function loadTeamApplications() {
       return;
     }
     
-    const teams = await fetch('http://localhost:3000/api/teams', {
+            const teams = await fetch('/api/teams', {
       headers: { 'Authorization': `Bearer ${token}` }
     }).then(res => res.json());
 
@@ -2506,7 +2506,7 @@ async function loadTeamApplications() {
     
     for (const team of myTeams) {
       try {
-        const response = await fetch(`http://localhost:3000/api/teams/${team.id}/applications`, {
+        const response = await fetch(`/api/teams/${team.id}/applications`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         
@@ -2583,7 +2583,7 @@ function displayTeamApplications(applications) {
 async function loadMyApplications() {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch('http://localhost:3000/api/applications/my', {
+            const response = await fetch('/api/applications/my', {
       headers: { 'Authorization': `Bearer ${token}` }
     });
 
@@ -2617,7 +2617,7 @@ async function displayMyApplications(applications) {
 
   // Получаем информацию о командах
   try {
-    const teamsResponse = await fetch('http://localhost:3000/api/teams');
+            const teamsResponse = await fetch('/api/teams');
     const teams = await teamsResponse.json();
     
     container.innerHTML = applications.map(application => {

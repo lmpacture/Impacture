@@ -1603,7 +1603,7 @@ function generateProductHtml(product) {
                 return;
             }
             
-            fetch('http://localhost:3000/api/cart', {
+            fetch('/api/cart', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -3401,7 +3401,6 @@ app.post('/api/teams/regenerate-html', authMiddleware, (req, res) => {
 // Запуск сервера
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on http://0.0.0.0:${PORT}`);
-  updateTournamentStatuses(); // Обновляем статусы при запуске
 });
 
 // Экспортируем функции для использования в других файлах
